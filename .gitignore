@@ -38,3 +38,5 @@ terraform.tfvars
 .terraform.lock.hcl
 
 ansible_collections*
+
+modules/instances/*hosts
