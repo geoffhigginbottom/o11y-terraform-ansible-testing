@@ -10,6 +10,12 @@ variable "ubuntu_count" {
 variable "ubuntu_ids" {
   default = []
 }
+variable "mysql_count" {
+  default = {}
+}
+variable "mysql_ids" {
+  default = []
+}
 
 ### AWS Variables ###
 # variable "profile" {
@@ -39,6 +45,9 @@ variable "private_key_path" {
 variable "ubuntu_instance_type" {
   default = []
 }
+variable "mysql_instance_type" {
+  default = []
+}
 
 variable "region" {
   description = "Select region (1:eu-west-1, 2:eu-west-3, 3:eu-central-1, 4:us-east-1, 5:us-east-2, 6:us-west-1, 7:us-west-2, 8:ap-southeast-1, 9:ap-southeast-2, 10:sa-east-1 )"
@@ -66,8 +75,6 @@ data "aws_ami" "latest-ubuntu" {
 
   filter {
     name = "name"
-    # values = ["ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-*"]
-    # values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
     values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"]
   }
 
@@ -79,6 +86,23 @@ data "aws_ami" "latest-ubuntu" {
 
 ### Splunk IM/APM Variables ###
 variable "environment" {
-  default = []
+    default = []
+}
+variable "access_token" {
+    default = []
+}
+variable "realm" {
+    default = []
 }
 
+
+### Ansible Variables ###
+variable "force_run_mysql_ansible" {
+    default = false
+}
+variable "force_run_ansible_install_otel_agent" {
+    default = false
+}
+variable "galaxy_otel" {
+    default = "yes"
+}
