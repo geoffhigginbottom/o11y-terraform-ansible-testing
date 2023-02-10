@@ -1,0 +1,7 @@
+[otel_agent_hosts]
+%{ for ip in mysql_servers ~}
+${ip}
+%{ endfor ~}
+%{ for ip in ubuntu_servers ~}
+${ip}
+%{ endfor ~}

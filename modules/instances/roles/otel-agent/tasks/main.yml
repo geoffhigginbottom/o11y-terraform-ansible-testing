@@ -1,0 +1,64 @@
+---
+### Use ansible-galaxy to install otel https://docs.splunk.com/Observability/gdi/opentelemetry/deployments/deployments-linux-ansible.html
+### Requires the signalfx.splunk_otel_collector collection to be installed on the host running Ansible, and can be installed using following command:
+### ansible-galaxy collection install signalfx.splunk_otel_collector
+
+- name: Install splunk_otel_collector using ansible 
+  include_role:
+    name: "signalfx.splunk_otel_collector.collector"
+  when: galaxy_otel == "yes"
+  vars:
+    splunk_access_token: '{{ accesstoken }}'
+    splunk_realm: '{{ realm }}'
+    splunk_memory_total_mib: "384"
+    splunk_ballast_size_mib: "128"
+    install_fluentd: false
+  
+
+
+### If 'galaxy_otel' is set to 'no' in terraform.tfvars then rather than using the default ansible-galaxy method for installing the otel collector
+### a simpler install method will be used which can speed up deployments and removes the dependency on ansible-galaxy
+
+
+## Linux Instances ##
+
+- name: Check for existing agent
+  stat:
+    path: /etc/otel/collector/agent_config.yaml
+  register: agent_config
+  when: 
+    - galaxy_otel == "no"
+    - ansible_os_family != "Windows"
+
+- name: Does agent_config.yaml exist
+  debug:
+    msg: "agent_config.yaml already exists"
+  when: 
+    - galaxy_otel == "no"
+    - agent_config.stat.exists and agent_config.stat.isreg
+    - ansible_os_family != "Windows"
+
+- name: Get Splunk OTEL Agent Install Script
+  ansible.builtin.get_url:
+    url: https://dl.signalfx.com/splunk-otel-collector.sh 
+    dest: /tmp/splunk-otel-collector.sh
+  when: 
+    - galaxy_otel == "no"
+    - not agent_config.stat.exists
+    - ansible_os_family != "Windows"
+
+- name: Install Splunk OTEL Agent
+  become: yes
+  command: sh /tmp/splunk-otel-collector.sh --realm {{ realm }}  -- {{ accesstoken }} --mode agent --without-fluentd
+  when:
+    - galaxy_otel == "no"
+    - not agent_config.stat.exists
+    - ansible_os_family != "Windows"
+
+## Linux Instances End ##
+
+## Windows Instances ##
+
+#TBC
+
+## Windows Instances End##
