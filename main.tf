@@ -25,7 +25,6 @@ module "instances" {
   count                                 = var.instances_enabled ? 1 : 0
   access_token                          = var.access_token
   galaxy_otel                           = var.galaxy_otel
-#   api_url                          = var.api_url
   realm                                 = var.realm
   environment                           = var.environment
   region                                = lookup(var.aws_region, var.region)
@@ -41,6 +40,11 @@ module "instances" {
   ubuntu_ids                            = var.ubuntu_ids
   mysql_count                           = var.mysql_count
   mysql_ids                             = var.mysql_ids
+  windows_server_count                  = var.windows_server_count
+  windows_server_ids                    = var.windows_server_ids
+  windows_server_administrator_pwd      = var.windows_server_administrator_pwd
+  windows_server_instance_type          = var.windows_server_instance_type
+  windows_server_ami                    = data.aws_ami.windows-server.id
   force_run_mysql_ansible               = var.force_run_mysql_ansible
   force_run_ansible_install_otel_agent  = var.force_run_ansible_install_otel_agent
 }
