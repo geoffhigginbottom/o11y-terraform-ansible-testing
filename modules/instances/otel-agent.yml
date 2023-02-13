@@ -1,6 +1,5 @@
 ---
 
 - hosts: otel_agent_hosts
-  become: yes
   roles:
     - otel-agent
