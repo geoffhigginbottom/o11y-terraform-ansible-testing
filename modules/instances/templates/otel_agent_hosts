@@ -1,7 +1,35 @@
-[otel_agent_hosts]
+[otel_agent_hosts:children]
+mysql_servers
+ubuntu_servers
+windows_servers
+
+[mysql_servers]
 %{ for ip in mysql_servers ~}
 ${ip}
 %{ endfor ~}
+
+[mysql_servers:vars]
+ansible_become=true
+ansible_become_method=sudo
+
+[ubuntu_servers]
 %{ for ip in ubuntu_servers ~}
 ${ip}
 %{ endfor ~}
+
+[ubuntu_servers:vars]
+ansible_become=true
+ansible_become_method=sudo
+
+[windows_servers]
+%{ for ip in windows_servers ~}
+${ip}
+%{ endfor ~}
+
+[windows_servers:vars]
+ansible_user=Administrator
+ansible_password=f7t67G^&(g78g^&)
+ansible_connection=winrm
+ansible_winrm_server_cert_validation=ignore
+ansible_winrm_transport=ntlm
+ansible_port=5985

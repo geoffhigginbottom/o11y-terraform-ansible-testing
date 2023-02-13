@@ -38,6 +38,23 @@ variable "mysql_count" {
 variable "mysql_ids" {
   default = []
 }
+## Windows Vars
+variable "windows_server_instance_type" {
+  default = []
+}
+variable "windows_server_administrator_pwd" {
+  default = []
+}
+variable "windows_server_count" {
+  default = {}
+}
+variable "windows_server_ids" {
+  default = []
+}
+variable "windows_server_ami" {
+  default = {}
+}
+
 
 ### Ansible Variables ###
 variable "mysql_servers" {
