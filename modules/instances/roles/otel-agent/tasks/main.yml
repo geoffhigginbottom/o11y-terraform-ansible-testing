@@ -3,7 +3,7 @@
 ### Requires the signalfx.splunk_otel_collector collection to be installed on the host running Ansible, and can be installed using following command:
 ### ansible-galaxy collection install signalfx.splunk_otel_collector
 
-- name: Install splunk_otel_collector using ansible 
+- name: Install splunk_otel_collector using ansible-galaxy signalfx.splunk_otel_collector collection
   include_role:
     name: "signalfx.splunk_otel_collector.collector"
   when: galaxy_otel == "yes"
@@ -16,9 +16,8 @@
   
 
 
-### If 'galaxy_otel' is set to 'no' in terraform.tfvars then rather than using the default ansible-galaxy method for installing the otel collector
+### If 'galaxy_otel' is set to 'no' in terraform.tfvars then rather than using the default ansible-galaxy collection for installing the otel collector
 ### a simpler install method will be used which can speed up deployments and removes the dependency on ansible-galaxy
-
 
 ## Linux Instances ##
 
@@ -27,33 +26,33 @@
     path: /etc/otel/collector/agent_config.yaml
   register: agent_config
   when: 
+    - ansible_os_family == "Posix"
     - galaxy_otel == "no"
-    - ansible_os_family != "Windows"
 
 - name: Does agent_config.yaml exist
   debug:
     msg: "agent_config.yaml already exists"
   when: 
+    - ansible_os_family == "Posix"
     - galaxy_otel == "no"
     - agent_config.stat.exists and agent_config.stat.isreg
-    - ansible_os_family != "Windows"
 
 - name: Get Splunk OTEL Agent Install Script
   ansible.builtin.get_url:
     url: https://dl.signalfx.com/splunk-otel-collector.sh 
     dest: /tmp/splunk-otel-collector.sh
   when: 
+    - ansible_os_family == "Posix"
     - galaxy_otel == "no"
     - not agent_config.stat.exists
-    - ansible_os_family != "Windows"
 
 - name: Install Splunk OTEL Agent
   become: yes
   command: sh /tmp/splunk-otel-collector.sh --realm {{ realm }}  -- {{ accesstoken }} --mode agent --without-fluentd
   when:
+    - ansible_os_family == "Posix"
     - galaxy_otel == "no"
     - not agent_config.stat.exists
-    - ansible_os_family != "Windows"
 
 ## Linux Instances End ##
 
