@@ -54,3 +54,6 @@ output "Ubuntu_Servers" {
 output "mysql_Servers" {
   value = var.instances_enabled ? module.instances.*.mysql_details : null
 }
+output "windows_Servers" {
+  value = var.instances_enabled ? module.instances.*.windows_details : null
+}

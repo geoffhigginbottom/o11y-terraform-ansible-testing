@@ -25,7 +25,7 @@ resource "aws_instance" "windows_server" {
   }
 }
 
-output "windows_server_details" {
+output "windows_details" {
   value =  formatlist(
     "%s, %s, %s", 
     aws_instance.windows_server.*.tags.Name,
