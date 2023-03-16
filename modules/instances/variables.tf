@@ -29,13 +29,7 @@ variable "ubuntu_ami" {
 variable "ubuntu_count" {
   default = []
 }
-variable "ubuntu_ids" {
-  default = []
-}
 variable "mysql_count" {
-  default = []
-}
-variable "mysql_ids" {
   default = []
 }
 ## Windows Vars
@@ -47,9 +41,6 @@ variable "windows_server_administrator_pwd" {
 }
 variable "windows_server_count" {
   default = {}
-}
-variable "windows_server_ids" {
-  default = []
 }
 variable "windows_server_ami" {
   default = {}

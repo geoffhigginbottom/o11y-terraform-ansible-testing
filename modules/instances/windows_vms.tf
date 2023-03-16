@@ -2,7 +2,7 @@ resource "aws_instance" "windows_server" {
   count                     = var.windows_server_count
   ami                       = var.windows_server_ami
   instance_type             = var.windows_server_instance_type
-  subnet_id                 = element(var.public_subnet_ids, count.index)
+  subnet_id                 = "${var.public_subnet_ids[ count.index % length(var.public_subnet_ids) ]}"
   key_name                  = var.key_name
   vpc_security_group_ids    = [aws_security_group.instances_sg.id]
 
@@ -20,7 +20,8 @@ resource "aws_instance" "windows_server" {
   EOF
 
   tags = {
-    Name = lower(join("_",[var.environment,element(var.windows_server_ids, count.index)]))
+    Name = lower(join("_",[var.environment, "windows", count.index + 1]))
+    Environment = lower(var.environment)
   }
 }
 

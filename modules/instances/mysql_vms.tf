@@ -2,7 +2,7 @@ resource "aws_instance" "mysql" {
   count                     = var.mysql_count
   ami                       = var.ubuntu_ami
   instance_type             = var.mysql_instance_type
-  subnet_id                 = element(var.public_subnet_ids, count.index)
+  subnet_id                 = "${var.public_subnet_ids[ count.index % length(var.public_subnet_ids) ]}"
   root_block_device {
     volume_size = 16
     volume_type = "gp2"
@@ -16,15 +16,10 @@ resource "aws_instance" "mysql" {
   vpc_security_group_ids    = [aws_security_group.instances_sg.id]
 
   tags = {
-    Name = lower(join("-",[var.environment,element(var.mysql_ids, count.index)]))
+    Name = lower(join("_",[var.environment, "mysql", count.index + 1]))
     Environment = lower(var.environment)
   }
  
-  # provisioner "file" {
-  #   source      = "${path.module}/scripts/update_splunk_otel_collector.sh"
-  #   destination = "/tmp/update_splunk_otel_collector.sh"
-  # }
-
   provisioner "remote-exec" {
     inline = [
       "sudo sed -i 's/127.0.0.1.*/127.0.0.1 ${self.tags.Name}.local ${self.tags.Name} localhost/' /etc/hosts",
@@ -36,13 +31,6 @@ resource "aws_instance" "mysql" {
       "sudo echo 'type=83' | sudo sfdisk /dev/xvdg",
       "sudo mkfs.ext4 /dev/xvdg1",
       "sudo mount /dev/xvdg1 /media/data",
-
-      # "TOKEN=${var.access_token}",
-      # "REALM=${var.realm}",
-  
-    ## Install Otel Agent
-      # "sudo curl -sSL https://dl.signalfx.com/splunk-otel-collector.sh > /tmp/splunk-otel-collector.sh",
-      # "sudo sh /tmp/splunk-otel-collector.sh --realm ${var.realm}  -- ${var.access_token} --mode agent",
     ]
   }
 

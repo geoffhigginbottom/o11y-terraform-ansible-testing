@@ -37,11 +37,8 @@ module "instances" {
   mysql_instance_type                   = var.mysql_instance_type
   ubuntu_ami                            = data.aws_ami.latest-ubuntu.id
   ubuntu_count                          = var.ubuntu_count
-  ubuntu_ids                            = var.ubuntu_ids
   mysql_count                           = var.mysql_count
-  mysql_ids                             = var.mysql_ids
   windows_server_count                  = var.windows_server_count
-  windows_server_ids                    = var.windows_server_ids
   windows_server_administrator_pwd      = var.windows_server_administrator_pwd
   windows_server_instance_type          = var.windows_server_instance_type
   windows_server_ami                    = data.aws_ami.windows-server.id

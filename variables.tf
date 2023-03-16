@@ -7,20 +7,14 @@ variable "instances_enabled" {
 variable "ubuntu_count" {
   default = {}
 }
-variable "ubuntu_ids" {
-  default = []
-}
 variable "mysql_count" {
   default = {}
 }
-variable "mysql_ids" {
-  default = []
+variable "windows_server_count" {
+  default = {}
 }
 
 ### AWS Variables ###
-# variable "profile" {
-#   default = []
-# }
 variable "aws_access_key_id" {
   default = []
 }
@@ -48,6 +42,7 @@ variable "ubuntu_instance_type" {
 variable "mysql_instance_type" {
   default = []
 }
+
 ## Windows Vars
 variable "windows_server_instance_type" {
   default = []
@@ -55,13 +50,6 @@ variable "windows_server_instance_type" {
 variable "windows_server_administrator_pwd" {
   default = []
 }
-variable "windows_server_count" {
-  default = {}
-}
-variable "windows_server_ids" {
-  default = []
-}
-
 
 variable "region" {
   description = "Select region (1:eu-west-1, 2:eu-west-3, 3:eu-central-1, 4:us-east-1, 5:us-east-2, 6:us-west-1, 7:us-west-2, 8:ap-southeast-1, 9:ap-southeast-2, 10:sa-east-1 )"

@@ -1,0 +1,4 @@
+[windows_servers]
+%{ for ip in windows_servers ~}
+${ip}
+%{ endfor ~}
