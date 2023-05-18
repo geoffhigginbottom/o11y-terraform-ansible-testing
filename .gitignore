@@ -40,3 +40,4 @@ terraform.tfvars
 ansible_collections*
 
 modules/instances/*hosts
+modules/instances/group_vars/*.yaml
