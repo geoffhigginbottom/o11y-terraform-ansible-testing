@@ -24,8 +24,8 @@ resource "aws_instance" "mysql" {
     inline = [
       "sudo sed -i 's/127.0.0.1.*/127.0.0.1 ${self.tags.Name}.local ${self.tags.Name} localhost/' /etc/hosts",
       "sudo hostnamectl set-hostname ${self.tags.Name}",
-      "sudo apt-get update",
-      "sudo apt-get upgrade -y",
+      # "sudo apt-get update",
+      # "sudo apt-get upgrade -y",
 
       "sudo mkdir /media/data",
       "sudo echo 'type=83' | sudo sfdisk /dev/xvdg",

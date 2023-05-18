@@ -1,0 +1,7 @@
+---
+ 
+- name: restart mysql
+  command: service mysqld restart
+
+- name: restart otel
+  command: sudo service splunk-otel-collector restart

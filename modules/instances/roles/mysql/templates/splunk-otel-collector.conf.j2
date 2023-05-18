@@ -1,0 +1,16 @@
+# This file is managed by Ansible so should not be edited directly
+# Deployed as part of the mysql role
+
+SPLUNK_CONFIG=/etc/otel/collector/agent_config.yaml
+SPLUNK_ACCESS_TOKEN={{access_token}}
+SPLUNK_REALM={{realm}}
+SPLUNK_API_URL=https://api.{{realm}}.signalfx.com
+SPLUNK_INGEST_URL=https://ingest.{{realm}}.signalfx.com
+SPLUNK_TRACE_URL=https://ingest.{{realm}}.signalfx.com/v2/trace
+SPLUNK_HEC_URL=https://ingest.{{realm}}.signalfx.com/v1/log
+SPLUNK_HEC_TOKEN={{access_token}}
+SPLUNK_MEMORY_TOTAL_MIB=384
+SPLUNK_BALLAST_SIZE_MIB=128
+SPLUNK_BUNDLE_DIR=/usr/lib/splunk-otel-collector/agent-bundle
+SPLUNK_COLLECTD_DIR=/usr/lib/splunk-otel-collector/agent-bundle/run/collectd
+OTELCOL_OPTIONS=--config=/etc/otel/collector/agent_config.yaml --config=/etc/otel/collector/receivers.yaml --config=/etc/otel/collector/processors.yaml --config=/etc/otel/collector/exporters.yaml --config=/etc/otel/collector/service.yaml --config=/etc/otel/collector/service_pipelines_metrics.yaml --config=/etc/otel/collector/receivers_mysql.yaml

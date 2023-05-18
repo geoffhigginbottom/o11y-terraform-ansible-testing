@@ -1,0 +1,97 @@
+---
+
+- name: Deploy custom agent_config.yaml
+  ansible.builtin.template:
+    src: agent_config.yaml.j2
+    dest: /etc/otel/collector/agent_config.yaml
+    owner: splunk-otel-collector
+    group: splunk-otel-collector
+    mode: '0755'
+    backup: yes
+  notify:
+    - restart otel
+  become: yes
+
+- name: Deploy custom receivers.yaml
+  ansible.builtin.template:
+    src: receivers.yaml.j2
+    dest: /etc/otel/collector/receivers.yaml
+    owner: splunk-otel-collector
+    group: splunk-otel-collector
+    mode: '0755'
+    backup: yes
+  notify:
+    - restart otel
+  become: yes
+
+- name: Deploy custom processors.yaml
+  ansible.builtin.template:
+    src: processors.yaml.j2
+    dest: /etc/otel/collector/processors.yaml
+    owner: splunk-otel-collector
+    group: splunk-otel-collector
+    mode: '0755'
+    backup: yes
+  notify:
+    - restart otel
+  become: yes
+
+- name: Deploy custom exporters.yaml
+  ansible.builtin.template:
+    src: exporters.yaml.j2
+    dest: /etc/otel/collector/exporters.yaml
+    owner: splunk-otel-collector
+    group: splunk-otel-collector
+    mode: '0755'
+    backup: yes
+  notify:
+    - restart otel
+  become: yes
+
+- name: Deploy custom service.yaml
+  ansible.builtin.template:
+    src: service.yaml.j2
+    dest: /etc/otel/collector/service.yaml
+    owner: splunk-otel-collector
+    group: splunk-otel-collector
+    mode: '0755'
+    backup: yes
+  notify:
+    - restart otel
+  become: yes
+
+- name: Deploy custom service_pipelines_metrics.yaml
+  ansible.builtin.template:
+    src: service_pipelines_metrics.yaml.j2
+    dest: /etc/otel/collector/service_pipelines_metrics.yaml
+    owner: splunk-otel-collector
+    group: splunk-otel-collector
+    mode: '0755'
+    backup: yes
+  notify:
+    - restart otel
+  become: yes
+
+- name: Deploy custom receivers_mysql.yaml
+  ansible.builtin.template:
+    src: receivers_mysql.yaml.j2
+    dest: /etc/otel/collector/receivers_mysql.yaml
+    owner: splunk-otel-collector
+    group: splunk-otel-collector
+    mode: '0755'
+    backup: yes
+  notify:
+    - restart otel
+  become: yes
+
+- name: Deploy custom splunk-otel-collector.conf
+  ansible.builtin.template:
+    src: splunk-otel-collector.conf.j2
+    dest: /etc/otel/collector/splunk-otel-collector.conf
+    owner: splunk-otel-collector
+    group: splunk-otel-collector
+    mode: '600'
+    backup: yes
+  notify:
+    - restart otel
+  become: yes

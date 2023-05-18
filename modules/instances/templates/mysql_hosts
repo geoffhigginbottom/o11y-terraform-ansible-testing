@@ -1,4 +1,0 @@
-[mysql_servers]
-%{ for ip in mysql_servers ~}
-${ip}
-%{ endfor ~}

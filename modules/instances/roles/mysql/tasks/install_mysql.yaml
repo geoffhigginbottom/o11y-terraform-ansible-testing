@@ -1,0 +1,61 @@
+---
+
+- name: Installing Mysql and dependencies
+  package:
+    name: "{{item}}"
+    state: present
+    update_cache: yes
+  loop:
+    - mysql-server
+    - mysql-client 
+    - python3-mysqldb
+    - libmysqlclient-dev
+  become: yes
+  tags: services
+
+- name: create /home/ubuntu/.my.cnf file with root password credentials
+  template: src=root.my.cnf.j2 dest=/home/ubuntu/.my.cnf
+  tags: security
+
+- name: create /root/.my.cnf file with root password credentials
+  template: src=root.my.cnf.j2 dest=/root/.my.cnf owner=root mode=0600
+  tags: security
+  become: true
+
+- name: Ensure MySQL service is started and set to start on boot
+  service: name=mysql state=started enabled=yes
+  tags: services
+
+- name: update mysql root password for all root accounts
+  mysql_user: 
+    name: root
+    host_all: yes
+    password: "{{ mysql_root_password }}"
+    state: present
+  become: yes
+  tags: security
+
+- name: Ensure root access privileges are granted
+  mysql_user: 
+    name: root 
+    password: "{{ mysql_root_password }}"
+    login_user: root 
+    host: "{{ item }} "
+    # host_all: yes
+    priv: '*.*:GRANT,ALL'
+    state: present
+  with_items:
+    - "{{ groups['mysql_servers'] }}"
+  tags: security
+
+- name: delete anonymous MySQL server user for ansible_hostname
+  action: mysql_user user="" host="{{ item }}" state="absent"
+  with_items:
+    - localhost
+    - "{{ ansible_fqdn }}"
+    - "{{ ansible_hostname }}"
+  tags: security
+
+- name: remove the MySQL test database
+  action: mysql_db db=test state=absent
+  tags: security

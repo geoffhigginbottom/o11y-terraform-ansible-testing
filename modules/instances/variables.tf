@@ -60,6 +60,9 @@ variable "force_run_ansible_install_otel_agent" {
 variable "galaxy_otel" {
     default = []
 }
+variable "mysql_root_password" {
+  default = []
+}
 
 ### Splunk IM/APM Variables ###
 variable "environment" {

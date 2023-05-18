@@ -1,0 +1,4 @@
+---
+
+- include_tasks: install_mysql.yaml
+- include_tasks: otel_custom_config.yaml

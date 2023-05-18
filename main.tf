@@ -38,6 +38,7 @@ module "instances" {
   ubuntu_ami                            = data.aws_ami.latest-ubuntu.id
   ubuntu_count                          = var.ubuntu_count
   mysql_count                           = var.mysql_count
+  mysql_root_password                   = var.mysql_root_password
   windows_server_count                  = var.windows_server_count
   windows_server_administrator_pwd      = var.windows_server_administrator_pwd
   windows_server_instance_type          = var.windows_server_instance_type

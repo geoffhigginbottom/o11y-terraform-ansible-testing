@@ -1,0 +1,27 @@
+# This file is managed by Ansible so should not be edited directly
+# Deployed as part of the mysql role
+# Merging is controlled by the OTELCOL_OPTIONS setting in /etc/otel/collector/splunk-otel-collector.conf which is also deployed via Ansible
+
+extensions:
+  health_check:
+    endpoint: 0.0.0.0:13133
+  http_forwarder:
+    ingress:
+      endpoint: 0.0.0.0:6060
+    egress:
+      endpoint: "${SPLUNK_API_URL}"
+      # Use instead when sending to gateway
+      #endpoint: "${SPLUNK_GATEWAY_URL}"
+  smartagent:
+    bundleDir: "${SPLUNK_BUNDLE_DIR}"
+    collectd:
+      configDir: "${SPLUNK_COLLECTD_DIR}"
+  zpages:
+    #endpoint: 0.0.0.0:55679
+  memory_ballast:
+    # In general, the ballast should be set to 1/3 of the collector's memory, the limit
+    # should be 90% of the collector's memory.
+    # The simplest way to specify the ballast size is set the value of SPLUNK_BALLAST_SIZE_MIB env variable.
+    size_mib: ${SPLUNK_BALLAST_SIZE_MIB}
+
+# Other stanzas such as receivers, exporters, processors, service are broken out into separate files and are merged with this file.

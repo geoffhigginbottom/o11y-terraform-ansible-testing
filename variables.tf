@@ -124,3 +124,6 @@ variable "force_run_ansible_install_otel_agent" {
 variable "galaxy_otel" {
     default = "yes"
 }
+variable "mysql_root_password" {
+  default = []
+}

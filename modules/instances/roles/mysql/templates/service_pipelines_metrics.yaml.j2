@@ -1,0 +1,28 @@
+# This file is managed by Ansible so should not be edited directly
+# Deployed as part of the mysql role
+# Merging is controlled by the OTELCOL_OPTIONS setting in /etc/otel/collector/splunk-otel-collector.conf which is also deployed via Ansible
+
+service:
+  extensions: 
+  - health_check
+  - http_forwarder
+  - zpages
+  - memory_ballast
+  - smartagent
+  pipelines:
+    metrics:
+      receivers:
+      - hostmetrics
+      - otlp
+      - signalfx
+      - smartagent/signalfx-forwarder
+      - smartagent/mysql
+      processors: 
+      - memory_limiter
+      - batch
+      - resourcedetection
+      exporters: 
+      - signalfx
+      # Use instead when sending to gateway
+      #exporters: 
+      # - otlp

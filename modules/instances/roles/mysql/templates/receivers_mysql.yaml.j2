@@ -1,0 +1,13 @@
+# This file is managed by Ansible so should not be edited directly
+# Deployed as part of the mysql role
+# Merging is controlled by the OTELCOL_OPTIONS setting in /etc/otel/collector/splunk-otel-collector.conf which is also deployed via Ansible
+
+receivers:
+  smartagent/mysql:
+    type: collectd/mysql
+    host: 127.0.0.1
+    port: 3306
+    databases:
+      - name:
+    username: root
+    password: {{ mysql_root_password }}
