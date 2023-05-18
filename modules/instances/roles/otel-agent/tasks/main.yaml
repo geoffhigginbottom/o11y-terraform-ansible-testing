@@ -48,7 +48,7 @@
 
 - name: Install Splunk OTEL Agent
   become: yes
-  command: sh /tmp/splunk-otel-collector.sh --realm {{ realm }}  -- {{ accesstoken }} --mode agent --without-fluentd
+  command: sh /tmp/splunk-otel-collector.sh --realm {{ realm }}  -- {{ access_token }} --mode agent --without-fluentd
   when:
     - ansible_os_family == "Posix"
     - galaxy_otel == "no"
