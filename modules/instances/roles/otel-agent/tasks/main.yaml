@@ -8,7 +8,7 @@
     name: "signalfx.splunk_otel_collector.collector"
   when: galaxy_otel == "yes"
   vars:
-    splunk_access_token: '{{ accesstoken }}'
+    splunk_access_token: '{{ access_token }}'
     splunk_realm: '{{ realm }}'
     splunk_memory_total_mib: "384"
     splunk_ballast_size_mib: "128"
