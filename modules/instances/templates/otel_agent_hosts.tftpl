@@ -28,8 +28,12 @@ ${ip}
 
 [windows_servers:vars]
 ansible_user=Administrator
-ansible_password=f7t67G^&(g78g^&)
+ansible_password=${windows_server_administrator_pwd}
 ansible_connection=winrm
 ansible_winrm_server_cert_validation=ignore
 ansible_winrm_transport=ntlm
 ansible_port=5985
+
+[all:vars]
+access_token=${access_token}
+realm=${realm}
