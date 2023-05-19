@@ -1,4 +1,7 @@
 ---
 
+- ansible.builtin.include_role:
+    name: mount_logs
+
 - include_tasks: install_mysql.yaml
 - include_tasks: otel_custom_config.yaml
