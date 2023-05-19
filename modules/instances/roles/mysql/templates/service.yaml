@@ -3,7 +3,13 @@
 # Merging is controlled by the OTELCOL_OPTIONS setting in /etc/otel/collector/splunk-otel-collector.conf which is also deployed via Ansible
 
 service:
-  extensions: [health_check, http_forwarder, zpages, memory_ballast, smartagent]
+  extensions:
+  - health_check
+  - http_forwarder
+  - zpages
+  - memory_ballast
+  - smartagent
+
   pipelines:
     traces:
       receivers: 
@@ -23,6 +29,7 @@ service:
       # exporters:
       # - otlp
       # - signalfx
+    
     metrics/internal:
       receivers: 
       - prometheus/internal
@@ -34,6 +41,7 @@ service:
       # to use signalfx exporter so host metadata gets emitted
       exporters: 
       - signalfx
+    
     logs/signalfx:
       receivers: 
       - signalfx
@@ -47,6 +55,7 @@ service:
       # Use instead when sending to gateway
       #exporters: 
       # - otlp
+    
     logs:
       receivers: 
       - fluentforward
