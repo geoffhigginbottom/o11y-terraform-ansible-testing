@@ -13,8 +13,13 @@
     splunk_memory_total_mib: "384"
     splunk_ballast_size_mib: "128"
     install_fluentd: false
+    # splunk_otel_collector_config: /tmp/agent_config.yaml
+    # splunk_otel_collector_config_source: templates/agent_config.yaml
+    # splunk_otel_collector_additional_env_vars:
+    #   MY_CUSTOM_VAR1: value1
+    #   MY_CUSTOM_VAR2: value2
   
-
+### Details on what parameters can be used above can be found here https://github.com/signalfx/splunk-otel-collector/tree/main/deployments/ansible/roles/collector
 
 ### If 'galaxy_otel' is set to 'no' in terraform.tfvars then rather than using the default ansible-galaxy collection for installing the otel collector
 ### a simpler install method will be used which can speed up deployments and removes the dependency on ansible-galaxy
