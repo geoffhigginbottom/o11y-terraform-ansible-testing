@@ -2,7 +2,7 @@
 
 - name: Deploy custom agent_config.yaml
   ansible.builtin.template:
-    src: agent_config.yaml.j2
+    src: agent_config.yaml
     dest: /etc/otel/collector/agent_config.yaml
     owner: splunk-otel-collector
     group: splunk-otel-collector
@@ -14,7 +14,7 @@
 
 - name: Deploy custom receivers.yaml
   ansible.builtin.template:
-    src: receivers.yaml.j2
+    src: receivers.yaml
     dest: /etc/otel/collector/receivers.yaml
     owner: splunk-otel-collector
     group: splunk-otel-collector
@@ -26,7 +26,7 @@
 
 - name: Deploy custom processors.yaml
   ansible.builtin.template:
-    src: processors.yaml.j2
+    src: processors.yaml
     dest: /etc/otel/collector/processors.yaml
     owner: splunk-otel-collector
     group: splunk-otel-collector
@@ -38,7 +38,7 @@
 
 - name: Deploy custom exporters.yaml
   ansible.builtin.template:
-    src: exporters.yaml.j2
+    src: exporters.yaml
     dest: /etc/otel/collector/exporters.yaml
     owner: splunk-otel-collector
     group: splunk-otel-collector
@@ -50,7 +50,7 @@
 
 - name: Deploy custom service.yaml
   ansible.builtin.template:
-    src: service.yaml.j2
+    src: service.yaml
     dest: /etc/otel/collector/service.yaml
     owner: splunk-otel-collector
     group: splunk-otel-collector
@@ -62,7 +62,7 @@
 
 - name: Deploy custom service_pipelines_metrics.yaml
   ansible.builtin.template:
-    src: service_pipelines_metrics.yaml.j2
+    src: service_pipelines_metrics.yaml
     dest: /etc/otel/collector/service_pipelines_metrics.yaml
     owner: splunk-otel-collector
     group: splunk-otel-collector
@@ -74,8 +74,20 @@
 
 - name: Deploy custom receivers_mysql.yaml
   ansible.builtin.template:
-    src: receivers_mysql.yaml.j2
+    src: receivers_mysql.yaml
     dest: /etc/otel/collector/receivers_mysql.yaml
+    owner: splunk-otel-collector
+    group: splunk-otel-collector
+    mode: '0755'
+    backup: yes
+  notify:
+    - restart otel
+  become: yes
+
+- name: Deploy custom service_telemetry.yaml
+  ansible.builtin.template:
+    src: service_telemetry.yaml
+    dest: /etc/otel/collector/service_telemetry.yaml
     owner: splunk-otel-collector
     group: splunk-otel-collector
     mode: '0755'
@@ -86,7 +98,7 @@
 
 - name: Deploy custom splunk-otel-collector.conf
   ansible.builtin.template:
-    src: splunk-otel-collector.conf.j2
+    src: splunk-otel-collector.conf
     dest: /etc/otel/collector/splunk-otel-collector.conf
     owner: splunk-otel-collector
     group: splunk-otel-collector
@@ -95,3 +107,21 @@
   notify:
     - restart otel
   become: yes
+
+# - name: Create logs directory if it does not exist
+#   ansible.builtin.file:
+#     path: /var/log/otel
+#     state: directory
+#     owner: splunk-otel-collector
+#     group: splunk-otel-collector
+#     mode: '064'
+#   become: yes
+
+# - name: Create logs file if it does not exist
+#   ansible.builtin.file:
+#     path: /var/log/otel/collector.log
+#     state: touch
+#     owner: splunk-otel-collector
+#     group: splunk-otel-collector
+#     mode: '064'
+#   become: yes
