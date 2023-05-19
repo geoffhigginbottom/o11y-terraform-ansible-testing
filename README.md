@@ -10,6 +10,10 @@ Update the collection by running the following:
 
     ansible-galaxy collection install -U signalfx.splunk_otel_collector
 
+Also requires ansible.posix collection
+
+    ansible-galaxy collection install ansible.posix
+
 Ansible macOS Fork Errors:
 
     Fix for current session
@@ -25,3 +29,4 @@ Ansible Test Commands (ran from the parent directory) to enable Ansible roles to
 ansible-playbook -i modules/instances/otel_agent_hosts modules/instances/ansible_role_otel-agent.yaml --extra-vars 'galaxy_otel=yes'
 ansible-playbook -i modules/instances/otel_agent_hosts modules/instances/ansible_role_otel-agent.yaml --extra-vars 'galaxy_otel=no'
 ansible-playbook -i modules/instances/mysql_hosts modules/instances/ansible_role_mysql.yaml
+Warning: As the mysql role modifies the default otel install, if you manually re-apply the galaxy-otel role, you will need to then re-apply the mysql role as well.
