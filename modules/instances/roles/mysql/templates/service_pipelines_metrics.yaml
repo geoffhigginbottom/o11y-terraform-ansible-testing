@@ -3,12 +3,6 @@
 # Merging is controlled by the OTELCOL_OPTIONS setting in /etc/otel/collector/splunk-otel-collector.conf which is also deployed via Ansible
 
 service:
-  extensions: 
-  - health_check
-  - http_forwarder
-  - zpages
-  - memory_ballast
-  - smartagent
   pipelines:
     metrics:
       receivers:
