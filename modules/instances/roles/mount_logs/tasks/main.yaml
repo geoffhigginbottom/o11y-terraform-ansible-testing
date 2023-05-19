@@ -1,0 +1,48 @@
+---
+
+- name: Create logs directory if it does not exist
+  ansible.builtin.file:
+    path: /mnt/logs
+    state: directory
+    mode: '640'
+  become: yes
+
+- name: Create a new ext4 primary partition
+  community.general.parted:
+    device: /dev/xvdg
+    number: 1
+    state: present
+    fs_type: ext4
+  become: yes
+
+- name: Create a ext4 filesystem
+  community.general.filesystem:
+    fstype: ext4
+    dev: /dev/xvdg1
+  become: yes
+
+- name: Mount drive for logs
+  ansible.posix.mount:
+    src: /dev/xvdg1
+    path: /mnt/logs
+    fstype: ext4
+    state: mounted
+  become: yes
+
+- name: Create logs directory if it does not exist
+  ansible.builtin.file:
+    path: /mnt/logs/otel
+    state: directory
+    owner: splunk-otel-collector
+    group: splunk-otel-collector
+    mode: '640'
+  become: yes
+
+- name: Create logs file if it does not exist
+  ansible.builtin.file:
+    path: /mnt/logs/otel/collector.log
+    state: touch
+    owner: splunk-otel-collector
+    group: splunk-otel-collector
+    mode: '640'
+  become: yes
