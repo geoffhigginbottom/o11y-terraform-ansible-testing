@@ -26,6 +26,11 @@
 
 ## Linux Instances ##
 
+# - name: Update all packages to their latest version
+#   ansible.builtin.apt:
+#     name: "*"
+#     state: latest
+
 - name: Check for existing agent
   stat:
     path: /etc/otel/collector/agent_config.yaml

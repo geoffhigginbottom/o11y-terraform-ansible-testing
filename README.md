@@ -29,4 +29,5 @@ Ansible Test Commands (ran from the parent directory) to enable Ansible roles to
 ansible-playbook -i modules/instances/otel_agent_hosts modules/instances/ansible_role_otel-agent.yaml --extra-vars 'galaxy_otel=yes'
 ansible-playbook -i modules/instances/otel_agent_hosts modules/instances/ansible_role_otel-agent.yaml --extra-vars 'galaxy_otel=no'
 ansible-playbook -i modules/instances/mysql_hosts modules/instances/ansible_role_mysql.yaml
+ansible-playbook -i modules/instances/hostname_hosts modules/instances/ansible_role_hostname.yaml
 Warning: As the mysql role modifies the default otel install, if you manually re-apply the galaxy-otel role, you will need to then re-apply the mysql role as well.

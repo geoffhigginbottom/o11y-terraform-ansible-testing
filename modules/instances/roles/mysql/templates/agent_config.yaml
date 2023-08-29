@@ -23,5 +23,3 @@ extensions:
     # should be 90% of the collector's memory.
     # The simplest way to specify the ballast size is set the value of SPLUNK_BALLAST_SIZE_MIB env variable.
     size_mib: ${SPLUNK_BALLAST_SIZE_MIB}
-
-# Other stanzas such as receivers, exporters, processors, service are broken out into separate files and are merged with this file.

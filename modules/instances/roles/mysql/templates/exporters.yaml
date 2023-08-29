@@ -29,5 +29,5 @@ exporters:
     tls:
       insecure: true
   # Debug
-  logging:
-    loglevel: debug
+  # logging:
+  #   loglevel: debug

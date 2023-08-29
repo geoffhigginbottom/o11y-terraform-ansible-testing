@@ -1,0 +1,14 @@
+---
+
+- name: Set a hostname specifying strategy
+  ansible.builtin.hostname:
+    name: "{{inventory_hostname}}"
+    use: debian
+  become: yes
+
+- name: Update /etc/hosts
+  ansible.builtin.lineinfile:
+    path: /etc/hosts
+    regexp: '^127\.0\.0\.1'
+    line: 127.0.0.1 {{inventory_hostname}}.local {{inventory_hostname}} localhost
+  become: yes

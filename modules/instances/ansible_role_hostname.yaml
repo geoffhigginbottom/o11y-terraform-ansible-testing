@@ -1,0 +1,5 @@
+---
+
+- hosts: hostname_hosts
+  roles:
+    - hostname

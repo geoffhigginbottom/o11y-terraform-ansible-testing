@@ -7,11 +7,6 @@ resource "aws_instance" "ubuntu" {
     volume_size = 16
     volume_type = "gp2"
   }
-  ebs_block_device {
-    device_name = "/dev/xvdg"
-    volume_size = 10
-    volume_type = "gp2"
-  }
   key_name                  = var.key_name
   vpc_security_group_ids    = [aws_security_group.instances_sg.id]
 
@@ -22,15 +17,8 @@ resource "aws_instance" "ubuntu" {
 
   provisioner "remote-exec" {
     inline = [
-      "sudo sed -i 's/127.0.0.1.*/127.0.0.1 ${self.tags.Name}.local ${self.tags.Name} localhost/' /etc/hosts",
-      "sudo hostnamectl set-hostname ${self.tags.Name}",
-      # "sudo apt-get update",
+      "sudo apt-get update",
       # "sudo apt-get upgrade -y",
-
-      "sudo mkdir /media/data",
-      "sudo echo 'type=83' | sudo sfdisk /dev/xvdg",
-      "sudo mkfs.ext4 /dev/xvdg1",
-      "sudo mount /dev/xvdg1 /media/data",
     ]
   }
 

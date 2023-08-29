@@ -49,16 +49,19 @@ variable "windows_server_ami" {
 
 ### Ansible Variables ###
 variable "mysql_servers" {
-    default = []
+  default = []
 }
 variable "force_run_mysql_ansible" {
-    default = []
+  default = []
 }
 variable "force_run_ansible_install_otel_agent" {
-    default = []
+  default = []
+}
+variable "force_run_ansible_hostname" {
+  default = false
 }
 variable "galaxy_otel" {
-    default = []
+  default = []
 }
 variable "mysql_root_password" {
   default = []
@@ -66,11 +69,11 @@ variable "mysql_root_password" {
 
 ### Splunk IM/APM Variables ###
 variable "environment" {
-    default = []
+  default = []
 }
 variable "access_token" {
-    default = []
+  default = []
 }
 variable "realm" {
-    default = []
+  default = []
 }

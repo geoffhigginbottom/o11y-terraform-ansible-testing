@@ -78,6 +78,7 @@ data "aws_ami" "latest-ubuntu" {
   filter {
     name = "name"
     values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"]
+    # values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
   }
 
   filter {
@@ -104,25 +105,28 @@ data "aws_ami" "windows-server" {
 
 ### Splunk IM/APM Variables ###
 variable "environment" {
-    default = []
+  default = []
 }
 variable "access_token" {
-    default = []
+  default = []
 }
 variable "realm" {
-    default = []
+  default = []
 }
 
 
 ### Ansible Variables ###
 variable "force_run_mysql_ansible" {
-    default = false
+  default = false
 }
 variable "force_run_ansible_install_otel_agent" {
-    default = false
+  default = false
+}
+variable "force_run_ansible_hostname" {
+  default = false
 }
 variable "galaxy_otel" {
-    default = "yes"
+  default = "yes"
 }
 variable "mysql_root_password" {
   default = []
