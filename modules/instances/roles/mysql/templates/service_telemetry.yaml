@@ -5,3 +5,5 @@ service:
       level: "debug"
       output_paths: [/mnt/logs/otel/collector.log]
       error_output_paths: [/mnt/logs/otel/collector.log]
+    metrics:
+      address: "${SPLUNK_LISTEN_INTERFACE}:8888"

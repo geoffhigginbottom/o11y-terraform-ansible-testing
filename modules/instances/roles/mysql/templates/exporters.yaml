@@ -23,11 +23,17 @@ exporters:
     endpoint: "${SPLUNK_HEC_URL}"
     source: "otel"
     sourcetype: "otel"
+    profiling_data_enabled: false
+  # Profiling
+  splunk_hec/profiling:
+    token: "${SPLUNK_ACCESS_TOKEN}"
+    endpoint: "${SPLUNK_INGEST_URL}/v1/log"
+    log_data_enabled: false
   # Send to gateway
   otlp:
     endpoint: "${SPLUNK_GATEWAY_URL}:4317"
     tls:
       insecure: true
-  # Debug
+  # # Debug - disabled as the logging level is set in the service_telemetry.yaml file instead
   # logging:
-  #   loglevel: debug
+  #   verbosity: detailed
