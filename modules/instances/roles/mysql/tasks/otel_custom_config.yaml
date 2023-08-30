@@ -107,21 +107,3 @@
   notify:
     - restart otel
   become: yes
-
-# - name: Create logs directory if it does not exist
-#   ansible.builtin.file:
-#     path: /var/log/otel
-#     state: directory
-#     owner: splunk-otel-collector
-#     group: splunk-otel-collector
-#     mode: '064'
-#   become: yes
-
-# - name: Create logs file if it does not exist
-#   ansible.builtin.file:
-#     path: /var/log/otel/collector.log
-#     state: touch
-#     owner: splunk-otel-collector
-#     group: splunk-otel-collector
-#     mode: '064'
-#   become: yes
