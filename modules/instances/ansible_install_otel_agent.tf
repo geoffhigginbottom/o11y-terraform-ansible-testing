@@ -26,6 +26,6 @@ resource "null_resource" "otel_agent_hosts" {
 ### Triggers the ansible role otel-agent to install the otel agent on hosts using either ansible-galaxy or a local playbook version depending en the setting of 'galaxy_otel' in terafrom.tfvars
 
   provisioner "local-exec" {
-    command = "ansible-playbook -i ${path.module}/otel_agent_hosts ${path.module}/ansible_role_otel-agent.yaml --extra-vars 'realm=${var.realm} accesstoken=${var.access_token} galaxy_otel=${var.galaxy_otel}'"
+    command = "ansible-playbook -i ${path.module}/otel_agent_hosts ${path.module}/ansible_role_otel_agent.yaml --extra-vars 'realm=${var.realm} accesstoken=${var.access_token} galaxy_otel=${var.galaxy_otel}'"
   }
 }
