@@ -1,6 +1,6 @@
 [mysql_servers]
 %{ for index, ip in mysql_servers ~}
-${prefix}-msql-${index+1} ansible_host=${ip}
+${prefix}-mysql-${index+1} ansible_host=${ip}
 %{ endfor ~}
 
 [mysql_servers:vars]
