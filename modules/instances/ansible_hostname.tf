@@ -17,12 +17,12 @@ resource "null_resource" "hostname_hosts" {
   triggers = {
     mysql_servers = join(",", aws_instance.mysql.*.public_ip) # will trigger ansible whenever there is a change to the list of ips for mysql servers 
     ubuntu_servers = join(",", aws_instance.ubuntu.*.public_ip) # will trigger ansible whenever there is a change to the list of ips for ubuntu servers
-    force_run_ansible_hostname = var.force_run_ansible_hostname ? "${timestamp()}" : null # will trigger ansible if var.force_run_ansible_hostname is 'true' - located in terraform.tfvars
+    force_run_ansible_hostname = var.force_run_ansible_hostname? "${timestamp()}" : null # will trigger ansible if var.force_run_ansible_hostname is 'true' - located in terraform.tfvars
   }
 
   provisioner "local-exec" {
-    command = "ansible-playbook -i ${path.module}/hostname_hosts ${path.module}/ansible_role_hostname.yaml"
+    command = var.force_run_ansible_hostname?"ansible-playbook -i ${path.module}/hostname_hosts ${path.module}/ansible_role_hostname.yaml":"echo Skipping Run"
   }
 
-  depends_on = [ null_resource.otel_agent_hosts ]
+  # depends_on = [ null_resource.otel_agent_hosts ]
 }
