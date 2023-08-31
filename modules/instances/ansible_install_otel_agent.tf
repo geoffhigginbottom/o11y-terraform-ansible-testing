@@ -20,7 +20,7 @@ resource "null_resource" "otel_agent_hosts" {
     mysql_servers = join(",", aws_instance.mysql.*.public_ip) # will trigger ansible whenever there is a change to the list of ips for mysql servers 
     ubuntu_servers = join(",", aws_instance.ubuntu.*.public_ip) # will trigger ansible whenever there is a change to the list of ips for ubuntu servers
     windows_servers = join(",", aws_instance.windows_server.*.public_ip) # will trigger ansible whenever there is a change to the list of ips for windows servers 
-    force_run_ansible_install_otel_agent = var.force_run_ansible_install_otel_agent ? "${timestamp()}" : null # will trigger ansible if var.force_run_ansible_install_otel_agent is changed (enabled then disabled etc) - located in terraform.tfvars
+    force_run_ansible_install_otel_agent = var.force_run_ansible_install_otel_agent ? "${timestamp()}" : null # will trigger ansible if var.force_run_ansible_install_otel_agent is 'true' - located in terraform.tfvars
   }
 
 ### Triggers the ansible role otel-agent to install the otel agent on hosts using either ansible-galaxy or a local playbook version depending en the setting of 'galaxy_otel' in terafrom.tfvars

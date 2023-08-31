@@ -45,6 +45,7 @@ module "instances" {
   windows_server_ami                    = data.aws_ami.windows-server.id
   force_run_mysql_ansible               = var.force_run_mysql_ansible
   force_run_ansible_install_otel_agent  = var.force_run_ansible_install_otel_agent
+  force_run_ansible_hostname            = var.force_run_ansible_hostname
 }
 
 ### Outputs ###

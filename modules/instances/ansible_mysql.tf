@@ -16,7 +16,7 @@ resource "null_resource" "mysql_hosts" {
   
   triggers = {
     mysql_servers = join(",", aws_instance.mysql.*.public_ip) # will trigger ansible whenever there is a change to the list of ips for mysql servers 
-    run_mysql_ansible = var.force_run_mysql_ansible ? "${timestamp()}" : null # will trigger ansible if var.force_run_mysql_ansible is changed (enabled then disabled etc) - located in terraform.tfvars
+    force_run_mysql_ansible = var.force_run_mysql_ansible ? "${timestamp()}" : null # will trigger ansible if var.force_run_mysql_ansible is 'true' - located in terraform.tfvars
   }
 
   provisioner "local-exec" {

@@ -58,7 +58,7 @@ variable "force_run_ansible_install_otel_agent" {
   default = []
 }
 variable "force_run_ansible_hostname" {
-  default = false
+  default = []
 }
 variable "galaxy_otel" {
   default = []
