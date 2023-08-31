@@ -24,5 +24,5 @@ resource "null_resource" "hostname_hosts" {
     command = "ansible-playbook -i ${path.module}/hostname_hosts ${path.module}/ansible_role_hostname.yaml"
   }
 
-  # depends_on = [ null_resource.otel_agent_hosts ]
+  depends_on = [ null_resource.otel_agent_hosts ]
 }
