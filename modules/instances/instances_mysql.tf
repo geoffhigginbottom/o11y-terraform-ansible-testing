@@ -20,12 +20,12 @@ resource "aws_instance" "mysql" {
     Environment = lower(var.environment)
   }
  
-  # provisioner "remote-exec" {
-  #   inline = [
-  #     # "sudo apt-get update",
-  #     # "sudo apt-get upgrade -y",
-  #   ]
-  # }
+  provisioner "remote-exec" {
+    inline = [
+      "sudo apt-get update",
+      "sudo apt-get upgrade -y",
+    ]
+  }
 
   connection {
     host = self.public_ip
