@@ -23,5 +23,8 @@ resource "null_resource" "mysql_hosts" {
     command = "ansible-playbook -i ${path.module}/mysql_hosts ${path.module}/ansible_role_mysql.yaml"
   }
 
-  depends_on = [ null_resource.otel_agent_hosts ]
+  depends_on = [
+    null_resource.otel_agent_hosts,
+    aws_instance.mysql
+  ]
 }
