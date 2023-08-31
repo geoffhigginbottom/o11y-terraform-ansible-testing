@@ -27,6 +27,7 @@ subnet_count   = "2"
 
 ### MySQL Server Variables ###
 mysql_instance_type = "t2.micro"
+mysql_root_password = "XXX"
 
 ### Windows Server Variables ###
 windows_server_administrator_pwd = "XXX"
@@ -38,6 +39,7 @@ access_token    = "XXX"
 realm           = "xxx"
 
 ### Ansible Variables ###
-# force_run_mysql_ansible = true
-# force_run_ansible_install_otel_agent = true # enable this to force running the otel-agent role, useful for testing as 
-# galaxy_otel = "no" # enable this, (set to "no") to overide default ansible-galaxy install for otel, and instead use basic install scripts
+force_run_mysql_ansible = false # if true, forces this role to run on every terraform apply, useful for testing
+force_run_ansible_install_otel_agent = false # if true, forces this role to run on every terraform apply, useful for testing
+force_run_ansible_hostname = false # if true, forces this role to run on every terraform apply, useful for testing
+galaxy_otel = "yes" # set to "no" to overide default ansible-galaxy install for otel, and instead use basic install scripts
