@@ -21,7 +21,8 @@ resource "null_resource" "hostname_hosts" {
   }
 
   provisioner "local-exec" {
-    command = var.force_run_ansible_hostname?"ansible-playbook -i ${path.module}/hostname_hosts ${path.module}/ansible_role_hostname.yaml":"echo Skipping Run"
+    command = "ansible-playbook -i ${path.module}/hostname_hosts ${path.module}/ansible_role_hostname.yaml"
+    # command = var.force_run_ansible_hostname?"ansible-playbook -i ${path.module}/hostname_hosts ${path.module}/ansible_role_hostname.yaml":"echo Skipping Run"
   }
 
   # depends_on = [ null_resource.otel_agent_hosts ]

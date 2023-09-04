@@ -20,7 +20,8 @@ resource "null_resource" "mysql_hosts" {
   }
 
   provisioner "local-exec" {
-    command = var.force_run_mysql_ansible?"ansible-playbook -i ${path.module}/mysql_hosts ${path.module}/ansible_role_mysql.yaml":"echo Skipping Run"
+    command = "ansible-playbook -i ${path.module}/mysql_hosts ${path.module}/ansible_role_mysql.yaml"
+    # command = var.force_run_mysql_ansible?"ansible-playbook -i ${path.module}/mysql_hosts ${path.module}/ansible_role_mysql.yaml":"echo Skipping Run"
   }
 
   depends_on = [
