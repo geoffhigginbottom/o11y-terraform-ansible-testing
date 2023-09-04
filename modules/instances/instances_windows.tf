@@ -16,12 +16,33 @@ resource "aws_instance" "windows_server" {
 
     Set-NetFirewallRule -Name "WINRM-HTTP-In-TCP-PUBLIC" -RemoteAddress Any
 
+    winrm set winrm/config/service '@{AllowUnencrypted="true"}'
+    winrm set winrm/config/service/auth '@{Basic="true"}'
+
   </powershell>
   EOF
 
   tags = {
     Name = lower(join("_",[var.environment, "windows", count.index + 1]))
     Environment = lower(var.environment)
+  }
+
+# This is really just a delaying tactic to force Terraform to wait for Windows Hosts to be ready before trying to initiate Ansible Playbooks via local-exec as remote-exe must be completed first
+# Without this remote-exec connection, Terraform will try to initiate Ansible Playbook as soon as Windows Hosts have been deployed, even though they are still 'booting up'
+  provisioner "remote-exec" {
+    inline = [
+      "powershell.exe New-Item C:/Temp/test.txt -type file",
+      "powershell.exe Remove-Item C:/Temp/test.txt"
+    ]
+  }
+
+  connection {
+    host = self.public_ip
+    type = "winrm"
+    user = "Administrator"
+    password = var.windows_server_administrator_pwd
+    insecure = true
+    timeout = "7m"
   }
 }
 
