@@ -25,6 +25,8 @@ resource "aws_instance" "windows_server" {
   tags = {
     Name = lower(join("_",[var.environment, "windows", count.index + 1]))
     Environment = lower(var.environment)
+    splunkit_environment_type = "non-prd"
+    splunkit_data_classification = "public"
   }
 
 # This is really just a delaying tactic to force Terraform to wait for Windows Hosts to be ready before trying to initiate Ansible Playbooks via local-exec as remote-exe must be completed first

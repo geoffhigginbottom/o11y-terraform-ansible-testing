@@ -13,6 +13,8 @@ resource "aws_instance" "ubuntu" {
   tags = {
     Name = lower(join("_",[var.environment, "ubuntu", count.index + 1]))
     Environment = lower(var.environment)
+    splunkit_environment_type = "non-prd"
+    splunkit_data_classification = "public"
   }
 
   provisioner "remote-exec" {

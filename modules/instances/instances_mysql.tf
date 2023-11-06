@@ -18,6 +18,8 @@ resource "aws_instance" "mysql" {
   tags = {
     Name = lower(join("_",[var.environment, "mysql", count.index + 1]))
     Environment = lower(var.environment)
+    splunkit_environment_type = "non-prd"
+    splunkit_data_classification = "public"
   }
  
   provisioner "remote-exec" {
