@@ -34,9 +34,12 @@ module "instances" {
   key_name                              = var.key_name
   private_key_path                      = var.private_key_path
   ubuntu_instance_type                  = var.ubuntu_instance_type
+  rocky_instance_type                   = var.rocky_instance_type
   mysql_instance_type                   = var.mysql_instance_type
   ubuntu_ami                            = data.aws_ami.latest-ubuntu.id
+  rocky_ami                             = data.aws_ami.rocky-8_9.id
   ubuntu_count                          = var.ubuntu_count
+  rocky_count                           = var.rocky_count
   mysql_count                           = var.mysql_count
   mysql_root_password                   = var.mysql_root_password
   windows_server_count                  = var.windows_server_count

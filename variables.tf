@@ -7,6 +7,9 @@ variable "instances_enabled" {
 variable "ubuntu_count" {
   default = {}
 }
+variable "rocky_count" {
+  default = {}
+}
 variable "mysql_count" {
   default = {}
 }
@@ -37,6 +40,9 @@ variable "private_key_path" {
   default = []
 }
 variable "ubuntu_instance_type" {
+  default = []
+}
+variable "rocky_instance_type" {
   default = []
 }
 variable "mysql_instance_type" {
@@ -78,7 +84,22 @@ data "aws_ami" "latest-ubuntu" {
   filter {
     name = "name"
     values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"]
-    # values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+}
+
+## Rocky AMI ##
+data "aws_ami" "rocky-8_9" {
+  most_recent = true
+  owners      = ["679593333241"]
+
+  filter {
+    name = "name"
+    values = ["Rocky-8-EC2-Base-8.9-*"]
   }
 
   filter {
@@ -94,7 +115,6 @@ data "aws_ami" "windows-server" {
 
   filter {
     name   = "name"
-    # values = ["Windows_Server-2019-English-Full-ContainersLatest-*"]
     values = ["Windows_Server-2022-English-Full-*"]
   }
 

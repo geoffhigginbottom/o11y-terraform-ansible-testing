@@ -1,6 +1,7 @@
 [hostname_hosts:children]
 mysql_servers
 ubuntu_servers
+rocky_servers
 
 [mysql_servers]
 %{ for index, ip in mysql_servers ~}
@@ -19,3 +20,13 @@ ${prefix}-ubuntu-${index+1} ansible_host=${ip}
 [ubuntu_servers:vars]
 ansible_become=true
 ansible_become_method=sudo
+
+[rocky_servers]
+%{ for index, ip in rocky_servers ~}
+${prefix}-rocky-${index+1} ansible_host=${ip}
+%{ endfor ~}
+
+[rocky_servers:vars]
+ansible_become=true
+ansible_become_method=sudo
+ansible_user=rocky

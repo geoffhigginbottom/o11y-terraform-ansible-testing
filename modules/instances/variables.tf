@@ -20,13 +20,22 @@ variable "private_key_path"{
 variable "ubuntu_instance_type" {
   default = []
 }
+variable "rocky_instance_type" {
+  default = []
+}
 variable "mysql_instance_type" {
   default = []
 }
 variable "ubuntu_ami" {
   default = []
 }
+variable "rocky_ami" {
+  default = []
+}
 variable "ubuntu_count" {
+  default = []
+}
+variable "rocky_count" {
   default = []
 }
 variable "mysql_count" {
