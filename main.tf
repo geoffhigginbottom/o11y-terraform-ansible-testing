@@ -56,6 +56,9 @@ module "instances" {
 output "Ubuntu_Servers" {
   value = var.instances_enabled ? module.instances.*.ubuntu_details : null
 }
+output "Rocky_Servers" {
+  value = var.instances_enabled ? module.instances.*.rocky_details : null
+}
 output "mysql_Servers" {
   value = var.instances_enabled ? module.instances.*.mysql_details : null
 }
