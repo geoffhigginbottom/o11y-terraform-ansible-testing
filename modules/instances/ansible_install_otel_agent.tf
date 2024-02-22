@@ -5,6 +5,7 @@ resource "local_file" "otel_agent_hosts" {
       mysql_servers = aws_instance.mysql.*.public_ip
       ubuntu_servers = aws_instance.ubuntu.*.public_ip
       rocky_servers = aws_instance.rocky.*.public_ip
+      gateway_servers = aws_instance.gateway.*.public_ip
       windows_servers = aws_instance.windows_server.*.public_ip
       windows_server_administrator_pwd = var.windows_server_administrator_pwd
       access_token = var.access_token
@@ -21,6 +22,7 @@ resource "null_resource" "otel_agent_hosts" {
     mysql_servers = join(",", aws_instance.mysql.*.public_ip) # will trigger ansible whenever there is a change to the list of ips for mysql servers 
     ubuntu_servers = join(",", aws_instance.ubuntu.*.public_ip) # will trigger ansible whenever there is a change to the list of ips for ubuntu servers
     rocky_servers = join(",", aws_instance.rocky.*.public_ip) # will trigger ansible whenever there is a change to the list of ips for rocky servers
+    gateway_servers = join(",", aws_instance.gateway.*.public_ip) # will trigger ansible whenever there is a change to the list of ips for gateway servers
     windows_servers = join(",", aws_instance.windows_server.*.public_ip) # will trigger ansible whenever there is a change to the list of ips for windows servers 
     force_run_ansible_install_otel_agent = var.force_run_ansible_install_otel_agent? "${timestamp()}" : null # will trigger ansible if var.force_run_ansible_install_otel_agent is 'true' - located in terraform.tfvars
   }

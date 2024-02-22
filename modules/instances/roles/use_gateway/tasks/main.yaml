@@ -1,0 +1,117 @@
+---
+### Extensions ###
+- name: Comment out the existing http_forwarder/egress endpoint
+  replace:
+    path: /etc/otel/collector/agent_config.yaml
+    regexp: '^(\s*endpoint: "\${SPLUNK_API_URL}")$'
+    replace: '      #endpoint: "${SPLUNK_API_URL}"'
+  notify:
+    - restart_otel
+  # when: "'${SPLUNK_GATEWAY_URL}' is defined"
+
+- name: Un-comment the http_forwarder/egress endpoint for gateway
+  replace:
+    path: /etc/otel/collector/agent_config.yaml
+    regexp: '^(\s*#endpoint: "\${SPLUNK_GATEWAY_URL}")$'
+    replace: '      endpoint: "${SPLUNK_GATEWAY_URL}"'
+  notify:
+    - restart_otel
+  # when: "'${SPLUNK_GATEWAY_URL}' is defined"
+
+### Exporters ###
+- name: Comment out the existing exporters/signalfx api_url
+  replace:
+    path: /etc/otel/collector/agent_config.yaml
+    regexp: '^(\s*api_url: "\${SPLUNK_API_URL}")$'
+    replace: '    #api_url: "${SPLUNK_API_URL}"'
+  notify:
+    - restart_otel
+
+- name: Comment out the existing exporters/signalfx ingest_url
+  replace:
+    path: /etc/otel/collector/agent_config.yaml
+    regexp: '^(\s*ingest_url: "\${SPLUNK_INGEST_URL}")$'
+    replace: '    #ingest_url: "${SPLUNK_INGEST_URL}"'
+  notify:
+    - restart_otel
+
+- name: Un-comment the exporters/signalfx api_url for gateway
+  replace:
+    path: /etc/otel/collector/agent_config.yaml
+    regexp: '^(\s*#api_url: http://\${SPLUNK_GATEWAY_URL}:6060)$'
+    replace: '    api_url: http://${SPLUNK_GATEWAY_URL}:6060'
+  notify:
+    - restart_otel
+
+- name: Un-comment the exporters/signalfx api_url for gateway
+  replace:
+    path: /etc/otel/collector/agent_config.yaml
+    regexp: '^(\s*#ingest_url: http://\${SPLUNK_GATEWAY_URL}:9943)$'
+    replace: '    ingest_url: http://${SPLUNK_GATEWAY_URL}:9943'
+  notify:
+    - restart_otel
+
+### pipelines
+## traces
+- name: Comment out the service/pipelines/traces/exporters - sapm, signalfx
+  replace:
+    path: /etc/otel/collector/agent_config.yaml
+    regexp: '^(\s*exporters: \[sapm, signalfx\])$'
+    replace: '      #exporters: [sapm, signalfx]'
+  notify:
+    - restart_otel
+
+- name: Un-comment service/pipelines/traces/exporters - otlp, signalfx
+  replace:
+    path: /etc/otel/collector/agent_config.yaml
+    regexp: '^(\s*#exporters: \[otlp, signalfx\])$'
+    replace: '      exporters: [otlp, signalfx]'
+  notify:
+    - restart_otel
+
+## metrics
+### had to use a different method as there are multiple instances of "exporters: [signalfx]" and only one needs to be replaced which is difficult with 'lineinfile', this is more reliable
+- name: Update service/pipelines/metrics/exporters settings
+  replace:
+    path: /etc/otel/collector/agent_config.yaml
+    regexp: '(^\s+metrics:\n\s+receivers: \[hostmetrics, otlp, signalfx, smartagent/signalfx-forwarder\]\n\s+processors: \[memory_limiter, batch, resourcedetection\]\n\s+exporters: \[signalfx\]\n\s+# Use instead when sending to gateway\n\s+#exporters: \[otlp\])'
+    replace: '    metrics:\n      receivers: [hostmetrics, otlp, signalfx, smartagent/signalfx-forwarder]\n      processors: [memory_limiter, batch, resourcedetection]\n      #exporters: [signalfx]\n      # Use instead when sending to gateway\n      exporters: [otlp]'
+  notify:
+    - restart_otel
+
+## logs
+- name: Comment out the service/pipelines/traces/logs - splunk_hec, splunk_hec/profiling
+  replace:
+    path: /etc/otel/collector/agent_config.yaml
+    regexp: '^(\s*exporters: \[splunk_hec, splunk_hec/profiling\])$'
+    replace: '      #exporters: [splunk_hec, splunk_hec/profiling]'
+  notify:
+    - restart_otel
+
+- name: Un-comment service/pipelines/traces/logs - otlp
+  replace:
+    path: /etc/otel/collector/agent_config.yaml
+    regexp: '^(\s*#exporters: \[otlp\])$'
+    replace: '      exporters: [otlp]'
+  notify:
+    - restart_otel
+    
+### splunk-otel-collector-conf
+- name: Add the SPLUNK_GATEWAY_URL setting
+  lineinfile:
+    path: /etc/otel/collector/splunk-otel-collector.conf
+    line: 'SPLUNK_GATEWAY_URL={{ splunk_gw_url }}'
+    insertafter: EOF
+  notify:
+    - restart_otel
+  # when: "'${SPLUNK_API_URL}' is defined"
+
+
+
+
+# ## stanza (e.g. metrics)
+# - name: Update service/pipelines/stanza/exporters settings
+#   replace:
+#     path: /etc/otel/collector/agent_config.yaml
+#     regexp: '(^\s+stanza:\n\s+receivers: \[XXX\]\n\s+processors: \[XXX\]\n\s+exporters: \[XXX\]\n\s+# Use instead when sending to gateway\n\s+#exporters: \[XXX\])'
+#     replace: '    stanza:\n      receivers: [XXX]\n      processors: [XXX]\n      exporters: [XXX]\n      # Use instead when sending to gateway\n      #exporters: [XXX]'

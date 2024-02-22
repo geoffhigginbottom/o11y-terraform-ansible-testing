@@ -1,0 +1,24 @@
+[use_gateway_hosts:vars]
+ansible_become=true
+ansible_become_method=sudo
+splunk_gw_url=${splunk_gw_url}
+
+[use_gateway_hosts:children]
+ubuntu_servers
+rocky_servers
+
+[ubuntu_servers]
+%{ for index, ip in ubuntu_servers ~}
+${prefix}-ubuntu-${index+1} ansible_host=${ip}
+%{ endfor ~}
+
+[ubuntu_servers:vars]
+ansible_user=ubuntu
+
+[rocky_servers]
+%{ for index, ip in rocky_servers ~}
+${prefix}-rocky-${index+1} ansible_host=${ip}
+%{ endfor ~}
+
+[rocky_servers:vars]
+ansible_user=rocky

@@ -10,6 +10,9 @@ variable "ubuntu_count" {
 variable "rocky_count" {
   default = {}
 }
+variable "gateway_count" {
+  default = {}
+}
 variable "mysql_count" {
   default = {}
 }
@@ -43,6 +46,9 @@ variable "ubuntu_instance_type" {
   default = []
 }
 variable "rocky_instance_type" {
+  default = []
+}
+variable "gateway_instance_type" {
   default = []
 }
 variable "mysql_instance_type" {
@@ -82,7 +88,7 @@ data "aws_ami" "latest-ubuntu" {
   owners      = ["099720109477"] # This is the owner id of Canonical who owns the official aws ubuntu images
 
   filter {
-    name = "name"
+    name   = "name"
     values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"]
   }
 
@@ -98,7 +104,7 @@ data "aws_ami" "rocky-8_9" {
   owners      = ["679593333241"]
 
   filter {
-    name = "name"
+    name   = "name"
     values = ["Rocky-8-EC2-Base-8.9-*"]
   }
 
@@ -141,6 +147,9 @@ variable "force_run_mysql_ansible" {
   default = false
 }
 variable "force_run_ansible_install_otel_agent" {
+  default = false
+}
+variable "force_run_ansible_use_gateway" {
   default = false
 }
 variable "force_run_ansible_hostname" {

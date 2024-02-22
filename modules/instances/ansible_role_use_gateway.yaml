@@ -1,0 +1,5 @@
+---
+
+- hosts: use_gateway_hosts
+  roles:
+    - use_gateway

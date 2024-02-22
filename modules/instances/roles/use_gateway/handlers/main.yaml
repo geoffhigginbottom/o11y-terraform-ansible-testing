@@ -1,0 +1,4 @@
+---
+
+- name: restart_otel
+  command: sudo service splunk-otel-collector restart

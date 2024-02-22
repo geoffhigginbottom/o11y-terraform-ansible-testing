@@ -2,6 +2,7 @@
 mysql_servers
 ubuntu_servers
 rocky_servers
+gateway_servers
 windows_servers
 
 [mysql_servers]
@@ -21,6 +22,7 @@ ${prefix}-ubuntu-${index+1} ansible_host=${ip}
 [ubuntu_servers:vars]
 ansible_become=true
 ansible_become_method=sudo
+install_splunk_otel_auto_instrumentation=true
 
 [rocky_servers]
 %{ for index, ip in rocky_servers ~}
@@ -31,6 +33,17 @@ ${prefix}-rocky-${index+1} ansible_host=${ip}
 ansible_become=true
 ansible_become_method=sudo
 ansible_user=rocky
+install_splunk_otel_auto_instrumentation=true
+
+[gateway_servers]
+%{ for index, ip in gateway_servers ~}
+${prefix}-gateway-${index+1} ansible_host=${ip}
+%{ endfor ~}
+
+[gateway_servers:vars]
+ansible_become=true
+ansible_become_method=sudo
+splunk_otel_collector_config=/etc/otel/collector/gateway_config.yaml
 
 [windows_servers]
 %{ for index, ip in windows_servers ~}

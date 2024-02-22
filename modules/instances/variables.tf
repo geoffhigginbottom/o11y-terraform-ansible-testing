@@ -23,6 +23,9 @@ variable "ubuntu_instance_type" {
 variable "rocky_instance_type" {
   default = []
 }
+variable "gateway_instance_type" {
+  default = []
+}
 variable "mysql_instance_type" {
   default = []
 }
@@ -37,6 +40,9 @@ variable "ubuntu_count" {
 }
 variable "rocky_count" {
   default = []
+}
+variable "gateway_count" {
+  default = {}
 }
 variable "mysql_count" {
   default = []
@@ -65,6 +71,9 @@ variable "force_run_mysql_ansible" {
 }
 variable "force_run_ansible_install_otel_agent" {
   default = []
+}
+variable "force_run_ansible_use_gateway" {
+  default = false
 }
 variable "force_run_ansible_hostname" {
   default = []
