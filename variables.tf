@@ -54,6 +54,9 @@ variable "gateway_instance_type" {
 variable "mysql_instance_type" {
   default = []
 }
+variable "my_public_ip" {
+  default = []
+}
 
 ## Windows Vars
 variable "windows_server_instance_type" {

@@ -60,6 +60,9 @@ variable "windows_server_count" {
 variable "windows_server_ami" {
   default = {}
 }
+variable "my_public_ip" {
+  default = []
+}
 
 
 ### Ansible Variables ###

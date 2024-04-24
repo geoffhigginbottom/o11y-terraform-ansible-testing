@@ -12,12 +12,14 @@ provider "aws" {
 
 
 module "vpc" {
-  source         = "./modules/vpc"
-  vpc_name       = var.environment
-  vpc_cidr_block = var.vpc_cidr_block
-  subnet_count   = var.subnet_count
-  region         = lookup(var.aws_region, var.region)
-  environment    = var.environment
+  source                = "./modules/vpc"
+  vpc_name              = var.environment
+  vpc_cidr_block        = var.vpc_cidr_block
+  subnet_count          = var.subnet_count
+  region                = lookup(var.aws_region, var.region)
+  environment           = var.environment
+  aws_access_key_id     = var.aws_access_key_id
+  aws_secret_access_key = var.aws_secret_access_key
 }
 
 module "instances" {
@@ -52,6 +54,7 @@ module "instances" {
   force_run_ansible_install_otel_agent = var.force_run_ansible_install_otel_agent
   force_run_ansible_use_gateway        = var.force_run_ansible_use_gateway
   force_run_ansible_hostname           = var.force_run_ansible_hostname
+  my_public_ip                         = "${chomp(data.http.my_public_ip.response_body)}"
 }
 
 ### Outputs ###
