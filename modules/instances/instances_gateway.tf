@@ -28,6 +28,8 @@ resource "aws_instance" "gateway" {
   key_name                  = var.key_name
   vpc_security_group_ids    = [aws_security_group.instances_sg.id]
 
+  # user_data = file("${path.module}/scripts/userdata.sh")
+
   tags = {
     Name = lower(join("_",[var.environment, "gateway", count.index + 1]))
     Environment = lower(var.environment)
@@ -44,6 +46,7 @@ resource "aws_instance" "gateway" {
 
   connection {
     host = self.public_ip
+    port = 22
     type = "ssh"
     user = "ubuntu"
     private_key = file(var.private_key_path)

@@ -10,6 +10,8 @@ resource "aws_instance" "rocky" {
   key_name                  = var.key_name
   vpc_security_group_ids    = [aws_security_group.instances_sg.id]
 
+  # user_data = file("${path.module}/scripts/userdata_rocky.sh")
+
   tags = {
     Name = lower(join("_",[var.environment, "rocky", count.index + 1]))
     Environment = lower(var.environment)
@@ -25,6 +27,7 @@ resource "aws_instance" "rocky" {
 
   connection {
     host = self.public_ip
+    port = 22
     type = "ssh"
     user = "rocky"
     private_key = file(var.private_key_path)

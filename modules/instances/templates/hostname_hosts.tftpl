@@ -5,7 +5,7 @@ rocky_servers
 
 [mysql_servers]
 %{ for index, ip in mysql_servers ~}
-${prefix}-mysql-${index+1} ansible_host=${ip}
+${prefix}-mysql-${index+1} ansible_host=${ip} ansible_port=22
 %{ endfor ~}
 
 [mysql_servers:vars]
@@ -14,7 +14,7 @@ ansible_become_method=sudo
 
 [ubuntu_servers]
 %{ for index, ip in ubuntu_servers ~}
-${prefix}-ubuntu-${index+1} ansible_host=${ip}
+${prefix}-ubuntu-${index+1} ansible_host=${ip} ansible_port=22
 %{ endfor ~}
 
 [ubuntu_servers:vars]
@@ -23,7 +23,7 @@ ansible_become_method=sudo
 
 [rocky_servers]
 %{ for index, ip in rocky_servers ~}
-${prefix}-rocky-${index+1} ansible_host=${ip}
+${prefix}-rocky-${index+1} ansible_host=${ip} ansible_port=22
 %{ endfor ~}
 
 [rocky_servers:vars]
