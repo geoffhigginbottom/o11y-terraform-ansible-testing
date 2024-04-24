@@ -8,6 +8,7 @@
   notify:
     - restart_otel
   # when: "'${SPLUNK_GATEWAY_URL}' is defined"
+  when: ansible_os_family != "Windows"
 
 - name: Un-comment the http_forwarder/egress endpoint for gateway
   replace:
@@ -17,6 +18,7 @@
   notify:
     - restart_otel
   # when: "'${SPLUNK_GATEWAY_URL}' is defined"
+  when: ansible_os_family != "Windows"
 
 ### Exporters ###
 - name: Comment out the existing exporters/signalfx api_url
@@ -26,6 +28,7 @@
     replace: '    #api_url: "${SPLUNK_API_URL}"'
   notify:
     - restart_otel
+  when: ansible_os_family != "Windows"
 
 - name: Comment out the existing exporters/signalfx ingest_url
   replace:
@@ -34,6 +37,7 @@
     replace: '    #ingest_url: "${SPLUNK_INGEST_URL}"'
   notify:
     - restart_otel
+  when: ansible_os_family != "Windows"
 
 - name: Un-comment the exporters/signalfx api_url for gateway
   replace:
@@ -42,6 +46,7 @@
     replace: '    api_url: http://${SPLUNK_GATEWAY_URL}:6060'
   notify:
     - restart_otel
+  when: ansible_os_family != "Windows"
 
 - name: Un-comment the exporters/signalfx api_url for gateway
   replace:
@@ -50,6 +55,7 @@
     replace: '    ingest_url: http://${SPLUNK_GATEWAY_URL}:9943'
   notify:
     - restart_otel
+  when: ansible_os_family != "Windows"
 
 ### pipelines
 ## traces
@@ -60,6 +66,7 @@
     replace: '      #exporters: [sapm, signalfx]'
   notify:
     - restart_otel
+  when: ansible_os_family != "Windows"
 
 - name: Un-comment service/pipelines/traces/exporters - otlp, signalfx
   replace:
@@ -68,33 +75,37 @@
     replace: '      exporters: [otlp, signalfx]'
   notify:
     - restart_otel
+  when: ansible_os_family != "Windows"
 
 ## metrics
 ### had to use a different method as there are multiple instances of "exporters: [signalfx]" and only one needs to be replaced which is difficult with 'lineinfile', this is more reliable
-- name: Update service/pipelines/metrics/exporters settings
-  replace:
-    path: /etc/otel/collector/agent_config.yaml
-    regexp: '(^\s+metrics:\n\s+receivers: \[hostmetrics, otlp, signalfx, smartagent/signalfx-forwarder\]\n\s+processors: \[memory_limiter, batch, resourcedetection\]\n\s+exporters: \[signalfx\]\n\s+# Use instead when sending to gateway\n\s+#exporters: \[otlp\])'
-    replace: '    metrics:\n      receivers: [hostmetrics, otlp, signalfx, smartagent/signalfx-forwarder]\n      processors: [memory_limiter, batch, resourcedetection]\n      #exporters: [signalfx]\n      # Use instead when sending to gateway\n      exporters: [otlp]'
-  notify:
-    - restart_otel
+# - name: Update service/pipelines/metrics/exporters settings
+#   replace:
+#     path: /etc/otel/collector/agent_config.yaml
+#     regexp: '(^\s+metrics:\n\s+receivers: \[hostmetrics, otlp, signalfx, smartagent/signalfx-forwarder\]\n\s+processors: \[memory_limiter, batch, resourcedetection\]\n\s+exporters: \[signalfx\]\n\s+# Use instead when sending to gateway\n\s+#exporters: \[otlp\])'
+#     replace: '    metrics:\n      receivers: [hostmetrics, otlp, signalfx, smartagent/signalfx-forwarder]\n      processors: [memory_limiter, batch, resourcedetection]\n      #exporters: [signalfx]\n      # Use instead when sending to gateway\n      exporters: [otlp]'
+#   notify:
+#     - restart_otel
+#   when: ansible_os_family != "Windows"
 
 ## logs
-- name: Comment out the service/pipelines/traces/logs - splunk_hec, splunk_hec/profiling
-  replace:
-    path: /etc/otel/collector/agent_config.yaml
-    regexp: '^(\s*exporters: \[splunk_hec, splunk_hec/profiling\])$'
-    replace: '      #exporters: [splunk_hec, splunk_hec/profiling]'
-  notify:
-    - restart_otel
+# - name: Comment out the service/pipelines/traces/logs - splunk_hec, splunk_hec/profiling
+#   replace:
+#     path: /etc/otel/collector/agent_config.yaml
+#     regexp: '^(\s*exporters: \[splunk_hec, splunk_hec/profiling\])$'
+#     replace: '      #exporters: [splunk_hec, splunk_hec/profiling]'
+#   notify:
+#     - restart_otel
+#   when: ansible_os_family != "Windows"
 
-- name: Un-comment service/pipelines/traces/logs - otlp
-  replace:
-    path: /etc/otel/collector/agent_config.yaml
-    regexp: '^(\s*#exporters: \[otlp\])$'
-    replace: '      exporters: [otlp]'
-  notify:
-    - restart_otel
+# - name: Un-comment service/pipelines/traces/logs - otlp
+#   replace:
+#     path: /etc/otel/collector/agent_config.yaml
+#     regexp: '^(\s*#exporters: \[otlp\])$'
+#     replace: '      exporters: [otlp]'
+#   notify:
+#     - restart_otel
+#   when: ansible_os_family != "Windows"
     
 ### splunk-otel-collector-conf
 - name: Add the SPLUNK_GATEWAY_URL setting
@@ -105,6 +116,7 @@
   notify:
     - restart_otel
   # when: "'${SPLUNK_API_URL}' is defined"
+  when: ansible_os_family != "Windows"
 
 
 
