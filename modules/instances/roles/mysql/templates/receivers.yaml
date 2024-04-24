@@ -3,10 +3,8 @@
 # Merging is controlled by the OTELCOL_OPTIONS setting in /etc/otel/collector/splunk-otel-collector.conf which is also deployed via Ansible
 
 receivers:
-  fluentforward:
-    endpoint: 127.0.0.1:8006
   hostmetrics:
-    collection_interval: 10s
+    collection_interval: 1s
     scrapers:
       cpu:
       disk:
@@ -21,6 +19,7 @@ receivers:
       processes:
       # System processes metrics, disabled by default
       # process:
+
   jaeger:
     protocols:
       grpc:
@@ -31,12 +30,14 @@ receivers:
         endpoint: "${SPLUNK_LISTEN_INTERFACE}:6831"
       thrift_http:
         endpoint: "${SPLUNK_LISTEN_INTERFACE}:14268"
+
   otlp:
     protocols:
       grpc:
         endpoint: "${SPLUNK_LISTEN_INTERFACE}:4317"
       http:
         endpoint: "${SPLUNK_LISTEN_INTERFACE}:4318"
+
   # This section is used to collect the OpenTelemetry Collector metrics
   # Even if just a Splunk APM customer, these metrics are included
   prometheus/internal:
@@ -48,17 +49,27 @@ receivers:
         - targets: ["${SPLUNK_LISTEN_INTERFACE}:8888"]
         metric_relabel_configs:
           - source_labels: [ __name__ ]
-            regex: '.*grpc_io.*'
+            regex: 'otelcol_rpc_.*'
             action: drop
+          - source_labels: [ __name__ ]
+            regex: 'otelcol_http_.*'
+            action: drop
+          - source_labels: [ __name__ ]
+            regex: 'otelcol_processor_batch_.*'
+            action: drop
+
   smartagent/signalfx-forwarder:
     type: signalfx-forwarder
     listenAddress: "${SPLUNK_LISTEN_INTERFACE}:9080"
+
   smartagent/processlist:
     type: processlist
+
   signalfx:
     endpoint: "${SPLUNK_LISTEN_INTERFACE}:9943"
     # Whether to preserve incoming access token and use instead of exporter token
     # default = false
     #access_token_passthrough: true
+    
   zipkin:
     endpoint: "${SPLUNK_LISTEN_INTERFACE}:9411"

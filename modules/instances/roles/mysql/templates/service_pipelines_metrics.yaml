@@ -10,13 +10,10 @@ service:
       - otlp
       - signalfx
       - smartagent/signalfx-forwarder
-      - smartagent/mysql
+      - mysql
       processors: 
       - memory_limiter
       - batch
       - resourcedetection
       exporters: 
       - signalfx
-      # Use instead when sending to gateway
-      #exporters: 
-      # - otlp

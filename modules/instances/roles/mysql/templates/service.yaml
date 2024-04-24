@@ -6,8 +6,7 @@ service:
   extensions:
   - health_check
   - http_forwarder
-  - zpages
-  - memory_ballast
+  #- zpages
   - smartagent
 
   pipelines:
@@ -37,8 +36,6 @@ service:
       - memory_limiter
       - batch
       - resourcedetection
-      # When sending to gateway, at least one metrics pipeline needs
-      # to use signalfx exporter so host metadata gets emitted
       exporters: 
       - signalfx
     
@@ -54,8 +51,7 @@ service:
       - signalfx
     
     logs:
-      receivers: 
-      - fluentforward
+      receivers:
       - otlp
       processors:
       - memory_limiter
@@ -65,6 +61,3 @@ service:
       exporters: 
       - splunk_hec
       - splunk_hec/profiling
-      # Use instead when sending to gateway
-      #exporters: 
-      # - otlp

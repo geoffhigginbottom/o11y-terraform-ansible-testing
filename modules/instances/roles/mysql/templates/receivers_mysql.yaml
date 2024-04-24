@@ -3,11 +3,18 @@
 # Merging is controlled by the OTELCOL_OPTIONS setting in /etc/otel/collector/splunk-otel-collector.conf which is also deployed via Ansible
 
 receivers:
-  smartagent/mysql:
-    type: collectd/mysql
-    host: 127.0.0.1
-    port: 3306
-    databases:
-      - name:
+  mysql:
+    endpoint: localhost:3306
     username: root
     password: {{ mysql_root_password }}
+    collection_interval: 10s
+    initial_delay: 1s
+    statement_events:
+      digest_text_limit: 120
+      time_limit: 24h
+      limit: 250
+    metrics:
+      mysql.query.slow.count:
+        enabled: true
+      mysql.query.count:
+        enabled: true
