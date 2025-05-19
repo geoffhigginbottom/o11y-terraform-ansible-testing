@@ -1,27 +1,45 @@
 ---
 ### Extensions ###
-- name: Comment out the existing http_forwarder/egress endpoint
+- name: Comment out the existing http_forwarder/egress endpoint (Linux)
   replace:
     path: /etc/otel/collector/agent_config.yaml
     regexp: '^(\s*endpoint: "\${SPLUNK_API_URL}")$'
     replace: '      #endpoint: "${SPLUNK_API_URL}"'
   notify:
     - restart_otel
-  # when: "'${SPLUNK_GATEWAY_URL}' is defined"
   when: ansible_os_family != "Windows"
 
-- name: Un-comment the http_forwarder/egress endpoint for gateway
+- name: Comment out the existing http_forwarder/egress endpoint (Windows)
+  ansible.windows.win_shell: |
+    (Get-Content "C:\ProgramData\Splunk\OpenTelemetry Collector\agent_config.yaml") | ForEach-Object {
+        $_ -replace '^\s*endpoint:\s*"\$\{SPLUNK_API_URL\}"', '      #endpoint: "${SPLUNK_API_URL}"'
+    } | Set-Content "C:\ProgramData\Splunk\OpenTelemetry Collector\agent_config.yaml"
+  notify:
+    - restart_otel_windows
+  when: ansible_os_family == "Windows"
+
+
+- name: Un-comment the http_forwarder/egress endpoint for gateway (Linux)
   replace:
     path: /etc/otel/collector/agent_config.yaml
     regexp: '^(\s*#endpoint: "\${SPLUNK_GATEWAY_URL}")$'
     replace: '      endpoint: "${SPLUNK_GATEWAY_URL}"'
   notify:
     - restart_otel
-  # when: "'${SPLUNK_GATEWAY_URL}' is defined"
   when: ansible_os_family != "Windows"
 
+- name: Un-comment the http_forwarder/egress endpoint for gateway (Windows)
+  ansible.windows.win_shell: |
+    (Get-Content "C:\ProgramData\Splunk\OpenTelemetry Collector\agent_config.yaml") | ForEach-Object {
+        $_ -replace '^\s*#\s*endpoint:\s*"\$\{SPLUNK_GATEWAY_URL\}"', '      endpoint: "${SPLUNK_GATEWAY_URL}"'
+    } | Set-Content "C:\ProgramData\Splunk\OpenTelemetry Collector\agent_config.yaml"
+  notify:
+    - restart_otel_windows
+  when: ansible_os_family == "Windows"
+
+
 ### Exporters ###
-- name: Comment out the existing exporters/signalfx api_url
+- name: Comment out the existing exporters/signalfx api_url (Linux)
   replace:
     path: /etc/otel/collector/agent_config.yaml
     regexp: '^(\s*api_url: "\${SPLUNK_API_URL}")$'
@@ -30,7 +48,17 @@
     - restart_otel
   when: ansible_os_family != "Windows"
 
-- name: Comment out the existing exporters/signalfx ingest_url
+- name: Comment out the existing exporters/signalfx api_url (Windows)
+  ansible.windows.win_shell: |
+    (Get-Content "C:\ProgramData\Splunk\OpenTelemetry Collector\agent_config.yaml") | ForEach-Object {
+        $_ -replace '^\s*api_url:\s*"\$\{SPLUNK_API_URL\}"', '    #api_url: "${SPLUNK_API_URL}"'
+    } | Set-Content "C:\ProgramData\Splunk\OpenTelemetry Collector\agent_config.yaml"
+  notify:
+    - restart_otel_windows
+  when: ansible_os_family == "Windows"
+
+
+- name: Comment out the existing exporters/signalfx ingest_url (Linux)
   replace:
     path: /etc/otel/collector/agent_config.yaml
     regexp: '^(\s*ingest_url: "\${SPLUNK_INGEST_URL}")$'
@@ -39,7 +67,17 @@
     - restart_otel
   when: ansible_os_family != "Windows"
 
-- name: Un-comment the exporters/signalfx api_url for gateway
+- name: Comment out the existing exporters/signalfx ingest_url (Windows)
+  ansible.windows.win_shell: |
+    (Get-Content "C:\ProgramData\Splunk\OpenTelemetry Collector\agent_config.yaml") | ForEach-Object {
+        $_ -replace '^\s*ingest_url:\s*"\$\{SPLUNK_INGEST_URL\}"', '    #ingest_url: "${SPLUNK_INGEST_URL}"'
+    } | Set-Content "C:\ProgramData\Splunk\OpenTelemetry Collector\agent_config.yaml"
+  notify:
+    - restart_otel_windows
+  when: ansible_os_family == "Windows"
+
+
+- name: Un-comment the exporters/signalfx api_url for gateway (Linux)
   replace:
     path: /etc/otel/collector/agent_config.yaml
     regexp: '^(\s*#api_url: http://\${SPLUNK_GATEWAY_URL}:6060)$'
@@ -48,7 +86,18 @@
     - restart_otel
   when: ansible_os_family != "Windows"
 
-- name: Un-comment the exporters/signalfx api_url for gateway
+- name: Un-comment the exporters/signalfx api_url for gateway (Windows)
+  ansible.windows.win_shell: |
+    (Get-Content "C:\ProgramData\Splunk\OpenTelemetry Collector\agent_config.yaml") | ForEach-Object {
+        $_ -replace '^\s*#\s*(api_url: http://\${SPLUNK_GATEWAY_URL}:6060)$', '    $1'
+    } | Set-Content "C:\ProgramData\Splunk\OpenTelemetry Collector\agent_config.yaml"
+  notify:
+    - restart_otel_windows
+  when: ansible_os_family == "Windows"
+
+
+
+- name: Un-comment the exporters/signalfx ingest_url for gateway (Linux)
   replace:
     path: /etc/otel/collector/agent_config.yaml
     regexp: '^(\s*#ingest_url: http://\${SPLUNK_GATEWAY_URL}:9943)$'
@@ -57,9 +106,18 @@
     - restart_otel
   when: ansible_os_family != "Windows"
 
+- name: Un-comment the exporters/signalfx ingest_url for gateway (Windows)
+  ansible.windows.win_shell: |
+    (Get-Content "C:\ProgramData\Splunk\OpenTelemetry Collector\agent_config.yaml") | ForEach-Object {
+        $_ -replace '^\s*#\s*(ingest_url: http://\${SPLUNK_GATEWAY_URL}:9943)$', '    $1'
+    } | Set-Content "C:\ProgramData\Splunk\OpenTelemetry Collector\agent_config.yaml"
+  notify:
+    - restart_otel_windows
+  when: ansible_os_family == "Windows"
+
 ### pipelines
 ## traces
-- name: Comment out the service/pipelines/traces/exporters - sapm, signalfx
+- name: Comment out the service/pipelines/traces/exporters - sapm, signalfx (Linux)
   replace:
     path: /etc/otel/collector/agent_config.yaml
     regexp: '^(\s*exporters: \[sapm, signalfx\])$'
@@ -68,7 +126,17 @@
     - restart_otel
   when: ansible_os_family != "Windows"
 
-- name: Un-comment service/pipelines/traces/exporters - otlp, signalfx
+- name: Comment out the service/pipelines/traces/exporters - sapm, signalfx (Windows)
+  ansible.windows.win_shell: |
+    (Get-Content "C:\ProgramData\Splunk\OpenTelemetry Collector\agent_config.yaml") | ForEach-Object {
+        $_ -replace '^\s*exporters:\s*\[sapm, signalfx\]', '      #exporters: [sapm, signalfx]'
+    } | Set-Content "C:\ProgramData\Splunk\OpenTelemetry Collector\agent_config.yaml"
+  notify:
+    - restart_otel_windows
+  when: ansible_os_family == "Windows"
+
+
+- name: Un-comment service/pipelines/traces/exporters - otlp, signalfx (Linux)
   replace:
     path: /etc/otel/collector/agent_config.yaml
     regexp: '^(\s*#exporters: \[otlp, signalfx\])$'
@@ -76,6 +144,15 @@
   notify:
     - restart_otel
   when: ansible_os_family != "Windows"
+
+- name: Un-comment service/pipelines/traces/exporters - otlp, signalfx (Windows)
+  ansible.windows.win_shell: |
+    (Get-Content "C:\ProgramData\Splunk\OpenTelemetry Collector\agent_config.yaml") | ForEach-Object {
+        $_ -replace '^\s*#\s*(exporters:\s*\[otlp, signalfx\])$', '      $1'
+    } | Set-Content "C:\ProgramData\Splunk\OpenTelemetry Collector\agent_config.yaml"
+  notify:
+    - restart_otel_windows
+  when: ansible_os_family == "Windows"
 
 ## metrics
 ### had to use a different method as there are multiple instances of "exporters: [signalfx]" and only one needs to be replaced which is difficult with 'lineinfile', this is more reliable
@@ -108,7 +185,7 @@
 #   when: ansible_os_family != "Windows"
     
 ### splunk-otel-collector-conf
-- name: Add the SPLUNK_GATEWAY_URL setting
+- name: Add the SPLUNK_GATEWAY_URL setting (Linux)
   lineinfile:
     path: /etc/otel/collector/splunk-otel-collector.conf
     line: 'SPLUNK_GATEWAY_URL={{ splunk_gw_url }}'

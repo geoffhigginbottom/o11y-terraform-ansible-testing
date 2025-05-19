@@ -3,3 +3,4 @@
 - hosts: use_gateway_hosts
   roles:
     - use_gateway
+  when: var.gateway_count >= "1"

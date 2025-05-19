@@ -10,8 +10,8 @@
   vars:
     splunk_access_token: '{{ access_token }}'
     splunk_realm: '{{ realm }}'
-    splunk_memory_total_mib: "384"
-    splunk_ballast_size_mib: "128"
+    # splunk_memory_total_mib: "512"
+    # splunk_ballast_size_mib: "128"
     install_fluentd: false
     # splunk_otel_collector_config: /tmp/agent_config.yaml
     # splunk_otel_collector_config_source: templates/agent_config.yaml

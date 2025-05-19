@@ -2,3 +2,7 @@
 
 - name: restart_otel
   command: sudo service splunk-otel-collector restart
+
+
+- name: restart_otel_windows
+  win_shell: Restart-Service splunk-otel-collector
