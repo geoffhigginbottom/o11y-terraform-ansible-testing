@@ -26,9 +26,9 @@ Connecting to windows instances using Ansible on macOS requires pyminrm
     pip install "pywinrm>=0.3.0" -->
 
 Ansible Test Commands (ran from the parent directory) to enable Ansible roles to be ran in isolation post TF Deploy
-ansible-playbook -i modules/instances/otel_agent_hosts modules/instances/ansible_role_otel_agent.yaml --extra-vars 'galaxy_otel=yes'
-ansible-playbook -i modules/instances/otel_agent_hosts modules/instances/ansible_role_otel_agent.yaml --extra-vars 'galaxy_otel=no'
-ansible-playbook -i modules/instances/use_gateway_hosts modules/instances/ansible_role_use_gateway.yaml
-ansible-playbook -i modules/instances/mysql_hosts modules/instances/ansible_role_mysql.yaml
-ansible-playbook -i modules/instances/hostname_hosts modules/instances/ansible_role_hostname.yaml
+    ansible-playbook -i modules/instances/otel_agent_hosts modules/instances/ansible_role_otel_agent.yaml --extra-vars 'galaxy_otel=yes'
+    ansible-playbook -i modules/instances/otel_agent_hosts modules/instances/ansible_role_otel_agent.yaml --extra-vars 'galaxy_otel=no'
+    ansible-playbook -i modules/instances/use_gateway_hosts modules/instances/ansible_role_use_gateway.yaml
+    ansible-playbook -i modules/instances/mysql_hosts modules/instances/ansible_role_mysql.yaml
+    ansible-playbook -i modules/instances/hostname_hosts modules/instances/ansible_role_hostname.yaml
 Warning: As the mysql role modifies the default otel install, if you manually re-apply the galaxy-otel role, you will need to then re-apply the mysql role as well.
