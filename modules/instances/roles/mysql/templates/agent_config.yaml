@@ -3,6 +3,12 @@
 # Merging is controlled by the OTELCOL_OPTIONS setting in /etc/otel/collector/splunk-otel-collector.conf which is also deployed via Ansible
 
 extensions:
+  headers_setter:
+    headers:
+      - action: upsert
+        key: X-SF-TOKEN
+        from_context: X-SF-TOKEN
+        default_value: "${SPLUNK_ACCESS_TOKEN}"
   health_check:
     endpoint: "${SPLUNK_LISTEN_INTERFACE}:13133"
   http_forwarder:
@@ -11,10 +17,12 @@ extensions:
     egress:
       endpoint: "${SPLUNK_API_URL}"
       # Use instead when sending to gateway
-      #endpoint: "${SPLUNK_GATEWAY_URL}"
+      # endpoint: "${SPLUNK_GATEWAY_URL}"
   smartagent:
     bundleDir: "${SPLUNK_BUNDLE_DIR}"
     collectd:
       configDir: "${SPLUNK_COLLECTD_DIR}"
   zpages:
-    endpoint: "${SPLUNK_LISTEN_INTERFACE}:55679"    
+    # endpoint: "${SPLUNK_LISTEN_INTERFACE}:55679"
+    expvar:
+      enabled: true

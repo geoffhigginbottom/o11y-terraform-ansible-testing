@@ -21,7 +21,7 @@ resource "aws_instance" "rocky" {
 
   provisioner "remote-exec" {
     inline = [
-      "sudo yum update -y"
+      "sudo dnf -y update"
     ]
   }
 

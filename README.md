@@ -21,9 +21,9 @@ Ansible macOS Fork Errors:
 
     Fix all future sessions
     echo "OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES" >> .bash_profile
-
+<!-- 
 Connecting to windows instances using Ansible on macOS requires pyminrm
-    pip install "pywinrm>=0.3.0"
+    pip install "pywinrm>=0.3.0" -->
 
 Ansible Test Commands (ran from the parent directory) to enable Ansible roles to be ran in isolation post TF Deploy
 ansible-playbook -i modules/instances/otel_agent_hosts modules/instances/ansible_role_otel_agent.yaml --extra-vars 'galaxy_otel=yes'

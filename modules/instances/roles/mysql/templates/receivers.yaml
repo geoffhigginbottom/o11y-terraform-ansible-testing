@@ -35,8 +35,12 @@ receivers:
     protocols:
       grpc:
         endpoint: "${SPLUNK_LISTEN_INTERFACE}:4317"
+        # Uncomment below config to preserve incoming access token and use it instead of the token value set in exporter config
+        # include_metadata: true
       http:
         endpoint: "${SPLUNK_LISTEN_INTERFACE}:4318"
+        # Uncomment below config to preserve incoming access token and use it instead of the token value set in exporter config
+        # include_metadata: true
 
   # This section is used to collect the OpenTelemetry Collector metrics
   # Even if just a Splunk APM customer, these metrics are included
@@ -46,21 +50,14 @@ receivers:
       - job_name: 'otel-collector'
         scrape_interval: 10s
         static_configs:
-        - targets: ["${SPLUNK_LISTEN_INTERFACE}:8888"]
+        - targets: ["0.0.0.0:8888"]
         metric_relabel_configs:
           - source_labels: [ __name__ ]
-            regex: 'otelcol_rpc_.*'
-            action: drop
-          - source_labels: [ __name__ ]
-            regex: 'otelcol_http_.*'
+            regex: 'promhttp_metric_handler_errors.*'
             action: drop
           - source_labels: [ __name__ ]
             regex: 'otelcol_processor_batch_.*'
             action: drop
-
-  smartagent/signalfx-forwarder:
-    type: signalfx-forwarder
-    listenAddress: "${SPLUNK_LISTEN_INTERFACE}:9080"
 
   smartagent/processlist:
     type: processlist
@@ -73,3 +70,6 @@ receivers:
     
   zipkin:
     endpoint: "${SPLUNK_LISTEN_INTERFACE}:9411"
+
+  # nop receiver to allow dynamic addition of receivers when discovery mode is enabled
+  nop:

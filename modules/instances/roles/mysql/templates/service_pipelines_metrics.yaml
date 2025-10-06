@@ -9,7 +9,6 @@ service:
       - hostmetrics
       - otlp
       - signalfx
-      - smartagent/signalfx-forwarder
       - mysql
       processors: 
       - memory_limiter

@@ -11,7 +11,8 @@ variable "rocky_count" {
   default = {}
 }
 variable "gateway_count" {
-  default = {}
+  default = 1
+  # should only be 1 as currently no LB has been setup so only a single GW should be deployed
 }
 variable "mysql_count" {
   default = {}
@@ -108,12 +109,18 @@ data "aws_ami" "rocky-8_9" {
 
   filter {
     name   = "name"
-    values = ["Rocky-8-EC2-Base-8.9-*"]
+    # values = ["Rocky-8-EC2-Base-8.9-*"]
+    values = ["Rocky-10-EC2-Base-10.0-*"]
   }
 
   filter {
     name   = "virtualization-type"
     values = ["hvm"]
+  }
+
+  filter {
+    name   = "architecture"
+    values = ["x86_64"]
   }
 }
 
@@ -159,7 +166,7 @@ variable "force_run_ansible_hostname" {
   default = false
 }
 variable "galaxy_otel" {
-  default = "yes"
+  default = true
 }
 variable "mysql_root_password" {
   default = []

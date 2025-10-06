@@ -4,9 +4,10 @@
 
 service:
   extensions:
+  - headers_setter
   - health_check
   - http_forwarder
-  #- zpages
+  - zpages
   - smartagent
 
   pipelines:
@@ -14,7 +15,6 @@ service:
       receivers: 
       - jaeger
       - otlp
-      - smartagent/signalfx-forwarder
       - zipkin
       processors:
       - memory_limiter
@@ -22,11 +22,11 @@ service:
       - resourcedetection
       #- resource/add_environment
       exporters: 
-      - sapm
+      - otlphttp
       - signalfx
       # Use instead when sending to gateway
       # exporters:
-      # - otlp
+      # - otlp/gateway
       # - signalfx
     
     metrics/internal:
@@ -36,6 +36,7 @@ service:
       - memory_limiter
       - batch
       - resourcedetection
+      - resource/add_mode
       exporters: 
       - signalfx
     
@@ -49,7 +50,20 @@ service:
       - resourcedetection
       exporters: 
       - signalfx
-    
+
+    logs/entities:
+      # Receivers are dynamically added if discovery mode is enabled
+      receivers: 
+      - nop
+      processors:
+      - memory_limiter
+      - batch
+      - resourcedetection
+      exporters:
+      - otlphttp/entities
+      # Use instead when sending to gateway
+      - otlp/gateway
+
     logs:
       receivers:
       - otlp
@@ -61,3 +75,5 @@ service:
       exporters: 
       - splunk_hec
       - splunk_hec/profiling
+      # Use instead when sending to gateway
+      # - otlp/gateway

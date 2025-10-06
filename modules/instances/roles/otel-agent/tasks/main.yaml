@@ -7,8 +7,10 @@
   include_role:
     name: "signalfx.splunk_otel_collector.collector"
   when: galaxy_otel == "yes"
+  # when: galaxy_otel | bool
   vars:
     splunk_access_token: '{{ access_token }}'
+    splunk_hec_token: '{{ access_token }}'
     splunk_realm: '{{ realm }}'
     # splunk_memory_total_mib: "512"
     # splunk_ballast_size_mib: "128"
