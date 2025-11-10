@@ -6,35 +6,18 @@ resource "aws_instance" "windows_server" {
   key_name                  = var.key_name
   vpc_security_group_ids    = [aws_security_group.instances_sg.id]
 
-  # user_data = <<EOF
-  # <powershell>
+  root_block_device {
+    volume_size = 80
+    volume_type = "gp3"
+    encrypted   = true
+    delete_on_termination = true
 
-  #   Get-LocalUser -Name "Administrator" | Set-LocalUser -Password (ConvertTo-SecureString -AsPlainText "${var.windows_server_administrator_pwd}" -Force)
-
-  #   Set-ItemProperty -Path 'HKLM:\Software\Microsoft\Active Setup\Installed Components\{A509B1A8-37EF-4b3f-8CFC-4F3A74704073}' -name IsInstalled -Value 0
-  #   Set-ItemProperty -Path 'HKLM:\Software\Microsoft\Active Setup\Installed Components\{A509B1A7-37EF-4b3f-8CFC-4F3A74704073}' -name IsInstalled -Value 0
-
-  #   Set-NetFirewallRule -Name "WINRM-HTTP-In-TCP-PUBLIC" -RemoteAddress Any
-
-  #   # Enable WinRM
-  #   winrm quickconfig -q
-  #   winrm set winrm/config/service/auth @{Basic="true"}
-  #   winrm set winrm/config/service @{AllowUnencrypted="true"}
-  #   winrm set winrm/config/winrs @{MaxMemoryPerShellMB="1024"}
-
-  #   # Allow WinRM inbound on port 5985
-  #   netsh advfirewall firewall add rule name="WinRM 5985" dir=in action=allow protocol=TCP localport=5985
-
-  #   # Make sure WinRM starts automatically
-  #   Set-Service -Name winrm -StartupType Automatic
-  #   Start-Service winrm
-
-  #   # Optional: log for debugging
-  #   New-Item -Path "C:\\temp" -ItemType Directory -Force
-  #   "WinRM configured by user_data at $(Get-Date)" | Out-File "C:\\temp\\winrm_setup.txt" -Encoding utf8
-    
-  # </powershell>
-  # EOF
+    tags = {
+      Name                          = lower(join("-", [var.environment, "windows", count.index + 1, "root"]))
+      splunkit_environment_type     = "non-prd"
+      splunkit_data_classification  = "private"
+    }
+  }
 
   user_data = <<EOF
   <powershell>
@@ -76,7 +59,7 @@ resource "aws_instance" "windows_server" {
     Name = lower(join("_",[var.environment, "windows", count.index + 1]))
     Environment = lower(var.environment)
     splunkit_environment_type = "non-prd"
-    splunkit_data_classification = "public"
+    splunkit_data_classification = "private"
   }
 
 # This is really just a delaying tactic to force Terraform to wait for Windows Hosts to be ready before trying to initiate Ansible Playbooks via local-exec as remote-exe must be completed first

@@ -5,7 +5,15 @@ resource "aws_instance" "ubuntu" {
   subnet_id                 = "${var.public_subnet_ids[ count.index % length(var.public_subnet_ids) ]}"
   root_block_device {
     volume_size = 16
-    volume_type = "gp2"
+    volume_type = "gp3"
+    encrypted   = true
+    delete_on_termination = true
+
+    tags = {
+      Name                          = lower(join("-", [var.environment, "ubuntu", count.index + 1, "root"]))
+      splunkit_environment_type     = "non-prd"
+      splunkit_data_classification  = "private"
+    }
   }
   key_name                  = var.key_name
   vpc_security_group_ids    = [aws_security_group.instances_sg.id]
@@ -16,7 +24,7 @@ resource "aws_instance" "ubuntu" {
     Name = lower(join("_",[var.environment, "ubuntu", count.index + 1]))
     Environment = lower(var.environment)
     splunkit_environment_type = "non-prd"
-    splunkit_data_classification = "public"
+    splunkit_data_classification = "private"
   }
 
   provisioner "remote-exec" {

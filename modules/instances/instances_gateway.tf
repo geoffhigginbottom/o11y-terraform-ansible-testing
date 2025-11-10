@@ -1,16 +1,3 @@
-# resource "aws_network_interface" "eni1" {
-#   count            = var.gateway_count
-#   # subnet_id        = "${var.public_subnet_ids[ count.index % length(var.public_subnet_ids) ]}"
-#   subnet_id        = "var.public_subnet_ids.[0]"
-#   private_ips      = ["172.34.1.10"]
-# }
-
-# resource "aws_network_interface" "eni1" {
-#   # count            = var.gateway_count
-#   subnet_id        = "${var.public_subnet_ids[ count.index % length(var.public_subnet_ids) ]}"
-#   private_ips      = ["172.34.1.10"]
-# }
-
 resource "aws_instance" "gateway" {
   count                     = var.gateway_count
   ami                       = var.ubuntu_ami
@@ -18,13 +5,17 @@ resource "aws_instance" "gateway" {
   subnet_id                 = "${var.public_subnet_ids[ count.index % length(var.public_subnet_ids) ]}"
   root_block_device {
     volume_size = 16
-    volume_type = "gp2"
+    volume_type = "gp3"
+    encrypted   = true
+    delete_on_termination = true
+
+    tags = {
+      Name                          = lower(join("-", [var.environment, "gateway", count.index + 1, "root"]))
+      splunkit_environment_type     = "non-prd"
+      splunkit_data_classification  = "private"
+    }
   }
-  # network_interface {
-  #   device_index            = 0
-  #   network_interface_id    = "aws_network_interface.eni1[count.index].id"
-  #   # network_interface_id    = "aws_network_interface.eni1"
-  # }
+
   key_name                  = var.key_name
   vpc_security_group_ids    = [aws_security_group.instances_sg.id]
 
@@ -34,7 +25,7 @@ resource "aws_instance" "gateway" {
     Name = lower(join("_",[var.environment, "gateway", count.index + 1]))
     Environment = lower(var.environment)
     splunkit_environment_type = "non-prd"
-    splunkit_data_classification = "public"
+    splunkit_data_classification = "private"
   }
 
   provisioner "remote-exec" {

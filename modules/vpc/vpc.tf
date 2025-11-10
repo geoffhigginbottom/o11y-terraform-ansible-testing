@@ -6,5 +6,7 @@ resource "aws_vpc" "main_vpc" {
 
   tags = {
     Name = "${var.environment}-main-vpc"
+    splunkit_environment_type = "non-prd"
+    splunkit_data_classification = "public"
   }
 }
