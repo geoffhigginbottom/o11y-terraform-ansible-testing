@@ -13,7 +13,7 @@ ${prefix}-mysql-${index+1} ansible_host=${ip} ansible_port=22
 [mysql_servers:vars]
 ansible_become=true
 ansible_become_method=sudo
-ansible_python_interpreter=/usr/bin/python3.10
+ansible_python_interpreter=/usr/bin/python3
 
 [ubuntu_servers]
 %{ for index, ip in ubuntu_servers ~}
@@ -25,7 +25,7 @@ ansible_become=true
 ansible_become_method=sudo
 install_splunk_otel_auto_instrumentation=true
 splunk_otel_auto_instrumentation_sdks=java, dotnet
-ansible_python_interpreter=/usr/bin/python3.10
+ansible_python_interpreter=/usr/bin/python3
 
 [rocky_servers]
 %{ for index, ip in rocky_servers ~}
@@ -49,7 +49,7 @@ ${prefix}-gateway-${index+1} ansible_host=${ip} ansible_port=22
 ansible_become=true
 ansible_become_method=sudo
 splunk_otel_collector_config=/etc/otel/collector/gateway_config.yaml
-ansible_python_interpreter=/usr/bin/python3.10
+ansible_python_interpreter=/usr/bin/python3
 
 [windows_servers]
 %{ for index, ip in windows_servers ~}
