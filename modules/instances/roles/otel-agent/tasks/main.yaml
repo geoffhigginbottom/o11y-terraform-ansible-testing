@@ -38,14 +38,16 @@
     path: /etc/otel/collector/agent_config.yaml
   register: agent_config
   when: 
-    - ansible_os_family == "Debian"
+    # - ansible_os_family == "Debian"
+    - ansible_system == "Linux" 
     - galaxy_otel == "no"
 
 - name: Does agent_config.yaml exist
   debug:
     msg: "agent_config.yaml already exists"
   when: 
-    - ansible_os_family == "Debian"
+    # - ansible_os_family == "Debian"
+    - ansible_system == "Linux"
     - galaxy_otel == "no"
     - agent_config.stat.exists and agent_config.stat.isreg
 
@@ -54,15 +56,17 @@
     url: https://dl.signalfx.com/splunk-otel-collector.sh 
     dest: /tmp/splunk-otel-collector.sh
   when: 
-    - ansible_os_family == "Debian"
+    # - ansible_os_family == "Debian"
+    - ansible_system == "Linux"
     - galaxy_otel == "no"
     - not agent_config.stat.exists
 
 - name: Install Splunk OTEL Agent
   become: yes
-  command: sh /tmp/splunk-otel-collector.sh --realm {{ realm }}  -- {{ access_token }} --mode agent --without-fluentd
+  command: sh /tmp/splunk-otel-collector.sh --realm {{ realm }}  -- {{ access_token }} --mode agent --discovery
   when:
-    - ansible_os_family == "Debian"
+    # - ansible_os_family == "Debian"
+    - ansible_system == "Linux"
     - galaxy_otel == "no"
     - not agent_config.stat.exists
 
