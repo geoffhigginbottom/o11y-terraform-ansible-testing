@@ -4,19 +4,21 @@
 # can choose to store the information in here, or enter it at run time.
 
 ## Enable / Disable Modules ##
-instances_enabled  = true
+instances_enabled = true
 
 ## Instance Quantities ##
-ubuntu_count = "1"
-rocky_count = "1"
-mysql_count = "1"
-windows_server_count = "1"
+gateway_count        = "1" # should only be 1 as currently no LB has been setup so only a single GW should be deployed
+ubuntu_count         = "1" # Uses Gateway
+rocky_count          = "0" # Uses Gateway
+mysql_count          = "1" # Does not use Gateway as it uses a multi-file agent configuration
+windows_server_count = "0" # Uses Gateway
 
 ## Auth Settings ##
 key_name              = "XXX"
 private_key_path      = "~/.ssh/id_rsa"
 ubuntu_instance_type  = "t2.micro"
 rocky_instance_type   = "t2.small"
+gateway_instance_type = "t2.small"
 aws_access_key_id     = "XXX"
 aws_secret_access_key = "XXX"
 
@@ -41,7 +43,8 @@ access_token    = "XXX"
 realm           = "xxx"
 
 ### Ansible Variables ###
-force_run_mysql_ansible = false # if true, forces this role to run on every terraform apply, useful for testing
+force_run_mysql_ansible              = false # if true, forces this role to run on every terraform apply, useful for testing
 force_run_ansible_install_otel_agent = false # if true, forces this role to run on every terraform apply, useful for testing
-force_run_ansible_hostname = false # if true, forces this role to run on every terraform apply, useful for testing
-galaxy_otel = "yes" # set to "no" to overide default ansible-galaxy install for otel, and instead use basic install scripts
+force_run_ansible_use_gateway        = false # if true, forces this role to run on every terraform apply, useful for testing
+force_run_ansible_hostname           = false # if true, forces this role to run on every terraform apply, useful for testing
+galaxy_otel                          = "yes" # set to "no" to overide default ansible-galaxy install for otel, and instead use basic install scripts
